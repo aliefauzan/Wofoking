@@ -33,6 +33,9 @@ struct FaceSample: Sendable {
     /// Both-eye blink amount (0…1) = MIN of left/right blendShape, i.e. the
     /// more-open eye. High only when BOTH eyes shut → a one-eye peek stays low.
     let eyeBlink: Double
+    /// Scowl score (0…1) from brow-furrow + frown/press blendShapes. Drives the
+    /// frustration taunt — free emotion signal, already on the TrueDepth anchor.
+    let frustration: Double
     var offAxis: Double { abs(yaw) + abs(pitch) }
     /// Where the player is actually looking = head pose + eye offset.
     var gazeYaw: Double { yaw + eyeYaw }
@@ -55,6 +58,11 @@ final class GazeTracker: NSObject, ObservableObject {
     @Published private(set) var permission: Permission = .unknown
     @Published private(set) var gaze: GazeState = .noFace
     @Published private(set) var isCalibrated = false
+    /// Monotonic count of caught peeks (head turned away but eyes slid back to
+    /// the screen). The engine reads the delta to tax peeks. Reset on lock.
+    @Published private(set) var peekCount = 0
+    /// True while the player holds a frustrated scowl (browDown + frown/press).
+    @Published private(set) var isFrustrated = false
     /// True only on hardware that supports ARKit face tracking.
     let isSupported: Bool
 
@@ -86,6 +94,10 @@ final class GazeTracker: NSObject, ObservableObject {
     // Debounce bookkeeping.
     private var candidate: GazeState = .noFace
     private var candidateSince = Date()
+
+    // Peek / frustration edge tracking.
+    private var wasPeeking = false
+    private var frustratedSince: Date?
 
     override init() {
         #if canImport(ARKit)
@@ -145,6 +157,10 @@ final class GazeTracker: NSObject, ObservableObject {
             baseGazePitch = best.gazePitch
             lastSeenLocked = Date()
             isCalibrated = true
+            peekCount = 0
+            wasPeeking = false
+            isFrustrated = false
+            frustratedSince = nil
         }
         #else
         isCalibrated = true
@@ -181,7 +197,18 @@ final class GazeTracker: NSObject, ObservableObject {
         let (eyeYaw, eyePitch) = eyeAngles(anchor.lookAtPoint)
         return FaceSample(id: anchor.identifier, tracked: anchor.isTracked,
                           yaw: yaw, pitch: pitch, eyeYaw: eyeYaw, eyePitch: eyePitch,
-                          eyeBlink: blinkAmount(anchor))
+                          eyeBlink: blinkAmount(anchor), frustration: frustrationScore(anchor))
+    }
+
+    /// Scowl score (0…1): furrowed brow OR a tight frown/press. Pure read of
+    /// ARKit blendShapes — no extra framework, no new permission.
+    nonisolated static func frustrationScore(_ anchor: ARFaceAnchor) -> Double {
+        let b = anchor.blendShapes
+        func v(_ k: ARFaceAnchor.BlendShapeLocation) -> Double { b[k]?.doubleValue ?? 0 }
+        let brow = (v(.browDownLeft) + v(.browDownRight)) / 2
+        let frown = (v(.mouthFrownLeft) + v(.mouthFrownRight)) / 2
+        let press = (v(.mouthPressLeft) + v(.mouthPressRight)) / 2
+        return min(1, 0.6 * brow + 0.4 * max(frown, press))
     }
 
     /// Both-eye blink from ARKit blendShapes (0 = open, 1 = shut). Returns the
@@ -253,6 +280,12 @@ final class GazeTracker: NSObject, ObservableObject {
             && abs(locked.gazeYaw - baseGazeYaw) <= config.eyeOnScreenToleranceDeg
             && abs(locked.gazePitch - baseGazePitch) <= config.eyeOnScreenToleranceDeg
 
+        // Count each caught peek on its rising edge (cheat detected).
+        if peeking && !wasPeeking { peekCount += 1 }
+        wasPeeking = peeking
+
+        updateFrustration(locked.frustration)
+
         // Eyes shut (both) advances the bar regardless of head pose — no peek
         // possible blind, so it skips the gaze guard. Takes priority over the
         // turn/peek decision. The debounce in evaluate() ignores quick blinks.
@@ -263,6 +296,21 @@ final class GazeTracker: NSObject, ObservableObject {
         }
 
         evaluate((turnedAway && !peeking) ? .lookingAway : .lookingAtScreen)
+    }
+
+    /// Rising/falling edge of a held scowl, with a hold to filter fleeting faces.
+    private func updateFrustration(_ value: Double) {
+        guard config.frustrationEnabled else { return }
+        if value >= config.frustrationThreshold {
+            if frustratedSince == nil { frustratedSince = Date() }
+            if let s = frustratedSince,
+               Date().timeIntervalSince(s) >= config.frustrationHoldSeconds, !isFrustrated {
+                isFrustrated = true
+            }
+        } else {
+            frustratedSince = nil
+            if isFrustrated { isFrustrated = false }
+        }
     }
 
     /// Debounced state commit. Ignores sub-threshold flicker / blinks.

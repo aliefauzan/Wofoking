@@ -18,6 +18,10 @@ enum MockContext {
     case level3Tap          // tapped the impossible level
     case deletePrank        // "you think you can run from us?"
     case gaveUp             // player tapped Give Up
+    case fakeOut            // bar faked 99% then dropped (L2 rage bait)
+    case peek               // caught peeking (head away, eyes back)
+    case heartRateSpike     // BPM crossed into elevated mid-level
+    case frustrated         // caught scowling at the screen
 }
 
 struct PhraseBank {
@@ -74,6 +78,33 @@ struct PhraseBank {
             "Quitter. The bar will remember this.",
             "You looked too long and lost your nerve. Typical.",
             "Surrender accepted. Disappointment noted.",
+        ],
+        .fakeOut: [
+            "99%! …just kidding.",
+            "Oops. Butterfingers. Back you go.",
+            "You really thought that was it?",
+            "So close. So very fake.",
+            "Loading complete! …loading not complete.",
+        ],
+        .peek: [
+            "I saw that. Eyes front, cheater.",
+            "Peeking? Bold. Punished.",
+            "Your eyes betray you.",
+            "Turn the head, not just the pretend.",
+            "Nice try, sneak. Minus points.",
+        ],
+        .heartRateSpike: [
+            "Relax. It's a loading bar.",
+            "Your heart is racing. Delicious.",
+            "Calm down. Or don't. I love this.",
+            "That pulse says you care too much.",
+        ],
+        .frustrated: [
+            "I can see that frown.",
+            "Aw, are you mad?",
+            "That scowl won't load the bar.",
+            "Anger detected. Anger ignored.",
+            "Unclench. It's just a game. Mostly.",
         ],
     ]
 }

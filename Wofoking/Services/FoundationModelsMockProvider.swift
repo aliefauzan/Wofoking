@@ -69,6 +69,14 @@ struct FoundationModelsMockProvider: AsyncMockTextProvider {
             return "The player tried to delete the app but can't escape. Be ominous and playful."
         case .gaveUp:
             return "The player stared at the screen and tapped Give Up at \(pct)%. Mock them for quitting."
+        case .fakeOut:
+            return "The bar pretended to finish at 99% then dropped to \(pct)%. Gloat about the fake-out."
+        case .peek:
+            return "The player turned their head away but slid their eyes back to peek (caught #\(failCount)). Mock the cheating."
+        case .heartRateSpike:
+            return "The player's heart rate just spiked. Tease them for getting stressed over a loading bar."
+        case .frustrated:
+            return "The player is scowling at the screen in frustration. Tease them about being mad."
         }
     }
 }

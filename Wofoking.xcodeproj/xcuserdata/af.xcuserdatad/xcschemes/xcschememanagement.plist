@@ -9,6 +9,11 @@
 			<key>orderHint</key>
 			<integer>1</integer>
 		</dict>
+		<key>Wofoking Watch Watch App.xcscheme_^#shared#^_</key>
+		<dict>
+			<key>orderHint</key>
+			<integer>2</integer>
+		</dict>
 		<key>Wofoking.xcscheme_^#shared#^_</key>
 		<dict>
 			<key>orderHint</key>
@@ -18,6 +23,16 @@
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
 		<key>A045915D2FECE16500E064CC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A04592AB2FECF7B800E064CC</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>A04592B02FECF7B800E064CC</key>
 		<dict>
 			<key>primary</key>
 			<true/>

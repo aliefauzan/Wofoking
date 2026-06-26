@@ -28,6 +28,7 @@ final class GameVM: ObservableObject {
     @Published private(set) var mockLine: String = ""
     @Published private(set) var canGiveUp = false
     @Published private(set) var gazeState: GazeState = .noFace
+    @Published private(set) var peekCount = 0
 
     let gaze: GazeTracker
     let engine: GameEngine
@@ -47,6 +48,7 @@ final class GameVM: ObservableObject {
         engine.$progress.assign(to: &$progress)
         engine.$lives.assign(to: &$lives)
         engine.$canGiveUp.assign(to: &$canGiveUp)
+        engine.$peekCount.assign(to: &$peekCount)
         engine.mocking.$currentLine.assign(to: &$mockLine)
         tracker.$gaze.assign(to: &$gazeState)
     }

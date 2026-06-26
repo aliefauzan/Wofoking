@@ -18,6 +18,8 @@ final class GameEngine: ObservableObject {
     @Published private(set) var lives: Int = 3
     /// Revealed once the player stares at the screen long enough to quit.
     @Published private(set) var canGiveUp = false
+    /// Peeks caught and taxed this run (drives the on-screen shame counter).
+    @Published private(set) var peekCount = 0
 
     let mocking: MockingService
 
@@ -41,6 +43,14 @@ final class GameEngine: ObservableObject {
     private var lastInviteAt = Date.distantPast
     private var pausedForBackground = false
 
+    // Fake-out (L2): armed once, springs near the top.
+    private var fakeOutUsed = false
+    private var fakeOutFreezeUntil: Date?
+    // Edge tracking for peek tax / HR spike / frustration taunts.
+    private var lastPeekCount = 0
+    private var wasElevated = false
+    private var wasFrustrated = false
+
     private var language: AppLanguage { persistence.settings.language }
 
     init(gaze: GazeTracker, mocking: MockingService? = nil) {
@@ -61,6 +71,12 @@ final class GameEngine: ObservableObject {
         windowStart = nil
         lookingAtScreenSince = nil
         canGiveUp = false
+        peekCount = 0
+        lastPeekCount = gaze.peekCount
+        fakeOutUsed = false
+        fakeOutFreezeUntil = nil
+        wasElevated = false
+        wasFrustrated = false
         previousGaze = gaze.gaze
         state = .lookingAtScreen
         VoiceService.shared.enabled = persistence.settings.voiceMockingEnabled
@@ -123,8 +139,29 @@ final class GameEngine: ObservableObject {
         }
 
         // Heart-rate driven volatility (L2): elevated BPM → more chaotic bar.
-        loader.heartRateHigh = persistence.settings.heartRateEnabled
-            && HeartRateService.shared.isElevated
+        let elevated = persistence.settings.heartRateEnabled && HeartRateService.shared.isElevated
+        loader.heartRateHigh = elevated
+        if elevated && !wasElevated {                       // rising edge → sabotage taunt
+            mocking.emit(.heartRateSpike, progress: loader.progress,
+                         speak: persistence.settings.voiceMockingEnabled, language: language)
+        }
+        wasElevated = elevated
+
+        // Frustration taunt: caught scowling at the screen (rising edge only).
+        if gaze.isFrustrated && !wasFrustrated {
+            mocking.emit(.frustrated, progress: loader.progress,
+                         speak: persistence.settings.voiceMockingEnabled, language: language)
+        }
+        wasFrustrated = gaze.isFrustrated
+
+        // Peek tax: punish each newly-caught peek while actively playing.
+        if config.peekTaxEnabled, gaze.peekCount > lastPeekCount,
+           state == .lookingAway || state == .lookingAtScreen {
+            lastPeekCount = gaze.peekCount
+            onPeek()
+        } else {
+            lastPeekCount = gaze.peekCount
+        }
 
         // Face lost → safe pause, never a win (PRD §14).
         if g == .faceLost {
@@ -159,6 +196,7 @@ final class GameEngine: ObservableObject {
                 if rules.usesCheckpoints { loader.makeCheckpoint() }
                 maybeInvite()
             }
+            if maybeFakeOut() { syncProgress(); return }   // frozen/yanked this tick
             loader.advance(dt, rules: rules)
             syncProgress()
             if loader.isComplete { enterWindow() }
@@ -184,6 +222,46 @@ final class GameEngine: ObservableObject {
         case .noFace, .faceLost, .lookingAway, .eyesClosed:
             break   // advancing handled above; others are no-ops here
         }
+    }
+
+    /// Caught peeking: knock the bar back, escalate the mock, shame counter.
+    private func onPeek() {
+        peekCount += 1
+        loader.applyPeekTax(config.peekTaxAmount)
+        syncProgress()
+        haptics.play(.barDrop)
+        mocking.emit(.peek, progress: loader.progress, failCount: peekCount,
+                     speak: persistence.settings.voiceMockingEnabled, language: language)
+    }
+
+    /// L2 rage bait: near the top, fake completion, freeze, then betray.
+    /// Returns true while the bar is frozen/yanked so the normal advance is
+    /// skipped this tick.
+    private func maybeFakeOut() -> Bool {
+        guard rules.unstable, config.fakeOutEnabled else { return false }
+        let now = Date()
+
+        // Holding the fake 99%, then dropping when the freeze elapses.
+        if let until = fakeOutFreezeUntil {
+            if now < until { return true }            // keep the bar pinned
+            fakeOutFreezeUntil = nil
+            loader.fakeDrop(to: Double.random(in: config.fakeOutDropTo))
+            haptics.play(.barDrop)
+            mocking.emit(.fakeOut, progress: loader.progress,
+                         speak: persistence.settings.voiceMockingEnabled, language: language)
+            return true
+        }
+
+        // Arm + spring once when the bar nears completion.
+        if !fakeOutUsed, loader.progress >= config.fakeOutTriggerProgress,
+           Double.random(in: 0...1) < config.fakeOutChance {
+            fakeOutUsed = true
+            loader.freezeNearComplete()
+            fakeOutFreezeUntil = now.addingTimeInterval(config.fakeOutFreezeSeconds)
+            haptics.play(.dramatic100)               // fake "you made it!" buzz
+            return true
+        }
+        return false
     }
 
     private func enterWindow() {

@@ -29,15 +29,35 @@ final class LoadingController {
         var delta = rules.baseFillPerSecond * dt
         if rules.unstable {
             let volatility = heartRateHigh ? config.heartRateVolatilityBoost : 1.0
-            if Double.random(in: 0...1) < config.unstableDropChance {
-                // Taunting dip (L2 can decrease).
-                delta = -Double.random(in: config.unstableDropAmount) * volatility
+            // Drop chance is per-SECOND, scaled to this tick so it is frame-rate
+            // independent (the per-tick form fired every frame and stalled the bar).
+            if Double.random(in: 0...1) < config.unstableDropChance * dt {
+                // Taunting dip (L2 can decrease) — a RATE (%/s) scaled by dt,
+                // matching the fill, so it no longer overpowers it.
+                delta = -Double.random(in: config.unstableDropAmount) * volatility * dt
             } else {
                 let mult = Double.random(in: config.unstableFillRange) * volatility
                 delta *= mult
             }
         }
         progress = min(100, max(0, progress + delta))
+    }
+
+    // MARK: Fake-out (L2 rage bait)
+
+    /// Pin the bar to the cusp of completion for a dramatic "you made it!" beat.
+    func freezeNearComplete() { progress = 99 }
+
+    /// Betrayal: yank the bar back down after the fake-out freeze.
+    func fakeDrop(to value: Double) {
+        progress = max(0, min(progress, value))
+        lastCheckpoint = min(lastCheckpoint, progress)
+    }
+
+    /// Punitive drop when the player is caught peeking.
+    func applyPeekTax(_ amount: Double) {
+        progress = max(0, progress - amount)
+        lastCheckpoint = min(lastCheckpoint, progress)
     }
 
     /// Bar falls during the over-loading penalty (rendered when player looks back).

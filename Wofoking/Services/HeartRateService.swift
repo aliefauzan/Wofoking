@@ -79,6 +79,7 @@ final class HeartRateService: NSObject, ObservableObject {
     // MARK: Ingest
 
     private func ingest(_ value: Double) {
+        print("[HR][iOS] ingest value=\(value) enabled=\(enabled)")
         guard enabled, value > 0 else { return }
         bpm = Int(value.rounded())
         isStreaming = true
@@ -124,6 +125,7 @@ extension HeartRateService: WCSessionDelegate {
     }
 
     private nonisolated func handle(_ payload: [String: Any]) {
+        print("[HR][iOS] rx keys=\(payload.keys.sorted())")
         if let value = payload[HRKey.bpm] as? Double {
             Task { @MainActor in self.ingest(value) }
         }

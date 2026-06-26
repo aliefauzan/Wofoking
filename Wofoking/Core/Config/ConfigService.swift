@@ -89,12 +89,45 @@ final class ConfigService {
 
     /// Random fill multiplier range applied per tick when `unstable`.
     var unstableFillRange: ClosedRange<Double> = 0.4...1.8
-    /// Chance per tick the bar drops a little instead of rising (L2 taunt).
-    var unstableDropChance: Double = 0.12
-    /// % dropped on an unstable drop tick.
-    var unstableDropAmount: ClosedRange<Double> = 3...9
+    /// Expected number of taunting DROP ticks per SECOND (the engine multiplies
+    /// by `dt`, so it is frame-rate independent). Was a raw per-tick probability
+    /// (0.12) which, at 30 Hz, fired ~3.6 drops/sec and pinned the bar near 0.
+    var unstableDropChance: Double = 1.5
+    /// Drop RATE (% per second) on an unstable drop tick — scaled by `dt` like
+    /// the fill, NOT an absolute per-tick %. (The old absolute 3…9 %/tick at
+    /// 30 Hz overpowered the ~0.15 %/tick fill → bar stuck shaking below 10%.)
+    var unstableDropAmount: ClosedRange<Double> = 30...70
     /// Heart-rate volatility multiplier when BPM is high (P2).
     var heartRateVolatilityBoost: Double = 1.5
+
+    // MARK: Level 2 fake-out (rage bait)
+
+    /// Master switch for the near-complete fake-out (L2 only).
+    var fakeOutEnabled = true
+    /// Bar must climb past this before a fake-out can spring.
+    var fakeOutTriggerProgress: Double = 96
+    /// Chance the fake-out springs once armed (once per climb).
+    var fakeOutChance: Double = 0.6
+    /// "99%… almost…" dramatic freeze before the betrayal drop.
+    var fakeOutFreezeSeconds: TimeInterval = 0.7
+    /// Where the bar is yanked back to after the freeze.
+    var fakeOutDropTo: ClosedRange<Double> = 60...80
+
+    // MARK: Peek tax
+
+    /// Punish the player when caught peeking (head turned away, eyes slid back).
+    var peekTaxEnabled = true
+    /// % knocked off the bar each time a peek is caught.
+    var peekTaxAmount: Double = 5
+
+    // MARK: Frustration detection (facial expression — free via blendShapes)
+
+    /// Detect a furrowed-brow / tight-frown scowl and taunt it.
+    var frustrationEnabled = true
+    /// 0…1 scowl score (browDown + frown/press) at/above which = frustrated.
+    var frustrationThreshold: Double = 0.45
+    /// Hold the scowl this long before it counts (filters fleeting expressions).
+    var frustrationHoldSeconds: TimeInterval = 0.6
 
     // MARK: Penalty
 

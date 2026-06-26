@@ -13,6 +13,9 @@ struct WofokingApp: App {
     var body: some Scene {
         WindowGroup {
             RootView()
+                // Activate WCSession at launch so watch samples are not lost
+                // before the game screen first touches the singleton.
+                .task { _ = HeartRateService.shared }
         }
         .onChange(of: scenePhase) { _, phase in
             // Keep the screen awake while the app is in front; restore the

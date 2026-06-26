@@ -90,6 +90,7 @@ struct GameContainerView: View {
         VStack(spacing: 16) {
             HStack(alignment: .top) {
                 livesView
+                if vm.peekCount > 0 { peekShameView }
                 Spacer()
                 if vm.canGiveUp { giveUpButton }
                 if store.settings.heartRateEnabled { bpmView }
@@ -133,6 +134,22 @@ struct GameContainerView: View {
                 }
             }
         }
+    }
+
+    /// Shame counter: how many times the player was caught peeking.
+    private var peekShameView: some View {
+        HStack(spacing: 6) {
+            Image(systemName: "eye.trianglebadge.exclamationmark.fill")
+                .foregroundStyle(.yellow)
+            Text("\(vm.peekCount)")
+                .font(.system(.headline, design: .rounded).monospacedDigit())
+                .foregroundStyle(.white)
+            Text("peeks").font(.caption2).foregroundStyle(.white.opacity(0.7))
+        }
+        .padding(.horizontal, 12).padding(.vertical, 6)
+        .background(.ultraThinMaterial, in: Capsule())
+        .transition(.scale.combined(with: .opacity))
+        .animation(.default, value: vm.peekCount)
     }
 
     /// Live heart-rate readout streamed from the Apple Watch.
