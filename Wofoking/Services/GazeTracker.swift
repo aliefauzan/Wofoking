@@ -36,6 +36,10 @@ struct FaceSample: Sendable {
     /// Scowl score (0…1) from brow-furrow + frown/press blendShapes. Drives the
     /// frustration taunt — free emotion signal, already on the TrueDepth anchor.
     let frustration: Double
+    /// Face distance from the camera (metres) = length of the anchor transform
+    /// translation. Gates the eyes-closed path: far face → low-res mesh → bogus
+    /// blink, so eyesClosed is only trusted when the face is near.
+    let distanceM: Double
     var offAxis: Double { abs(yaw) + abs(pitch) }
     /// Where the player is actually looking = head pose + eye offset.
     var gazeYaw: Double { yaw + eyeYaw }
@@ -99,6 +103,11 @@ final class GazeTracker: NSObject, ObservableObject {
     private var wasPeeking = false
     private var frustratedSince: Date?
 
+    // Last yaw delta off baseline (deg) from the most recent good frame. Logged
+    // when the face is lost to diagnose whether `hardLookAwayYawThresholdDeg`
+    // (55°) is ever reached before TrueDepth drops the face (~45°) — Bug D.
+    private var lastYawDelta = 0.0
+
     override init() {
         #if canImport(ARKit)
         isSupported = ARFaceTrackingConfiguration.isSupported
@@ -144,26 +153,32 @@ final class GazeTracker: NSObject, ObservableObject {
         commit(.faceLost)
     }
 
-    /// Capture the active player's face as the locked anchor.
-    func lockCurrentFace() {
+    /// Capture the active player's face as the locked anchor. Returns false if
+    /// no usable face this frame (none present, or the chosen face is mid-blink
+    /// — locking on a blink would poison the gaze baseline and the eyes-closed
+    /// reference). Caller should keep waiting and retry on a later frame.
+    @discardableResult
+    func lockCurrentFace() -> Bool {
         #if canImport(ARKit)
         let faces = (session.currentFrame?.anchors ?? []).compactMap { $0 as? ARFaceAnchor }
         let samples = faces.map { Self.sample(from: $0) }
-        if let best = samples.min(by: { $0.offAxis < $1.offAxis }) {
-            lockedAnchorID = best.id
-            baseYaw = best.yaw          // neutral = where player looks now
-            basePitch = best.pitch
-            baseGazeYaw = best.gazeYaw
-            baseGazePitch = best.gazePitch
-            lastSeenLocked = Date()
-            isCalibrated = true
-            peekCount = 0
-            wasPeeking = false
-            isFrustrated = false
-            frustratedSince = nil
-        }
+        guard let best = samples.min(by: { $0.offAxis < $1.offAxis }),
+              best.eyeBlink < config.eyeClosedThreshold else { return false }
+        lockedAnchorID = best.id
+        baseYaw = best.yaw          // neutral = where player looks now
+        basePitch = best.pitch
+        baseGazeYaw = best.gazeYaw
+        baseGazePitch = best.gazePitch
+        lastSeenLocked = Date()
+        isCalibrated = true
+        peekCount = 0
+        wasPeeking = false
+        isFrustrated = false
+        frustratedSince = nil
+        return true
         #else
         isCalibrated = true
+        return true
         #endif
     }
 
@@ -195,9 +210,12 @@ final class GazeTracker: NSObject, ObservableObject {
     nonisolated static func sample(from anchor: ARFaceAnchor) -> FaceSample {
         let (yaw, pitch) = yawPitch(anchor.transform)
         let (eyeYaw, eyePitch) = eyeAngles(anchor.lookAtPoint)
+        let t = anchor.transform.columns.3
+        let distance = Double(simd_length(SIMD3<Float>(t.x, t.y, t.z)))
         return FaceSample(id: anchor.identifier, tracked: anchor.isTracked,
                           yaw: yaw, pitch: pitch, eyeYaw: eyeYaw, eyePitch: eyePitch,
-                          eyeBlink: blinkAmount(anchor), frustration: frustrationScore(anchor))
+                          eyeBlink: blinkAmount(anchor), frustration: frustrationScore(anchor),
+                          distanceM: distance)
     }
 
     /// Scowl score (0…1): furrowed brow OR a tight frown/press. Pure read of
@@ -254,6 +272,9 @@ final class GazeTracker: NSObject, ObservableObject {
         // fired .noFace and the locked player stopped being detected.)
         guard let locked = samples.first(where: { $0.id == id }), locked.tracked else {
             if Date().timeIntervalSince(lastSeenLocked) > config.faceLostGraceSeconds {
+                #if DEBUG
+                print("[GazeTracker] faceLost — last yawDelta \(String(format: "%.1f", lastYawDelta))° vs hardAway gate \(config.hardLookAwayYawThresholdDeg)°")
+                #endif
                 evaluate(.faceLost)
             }
             return
@@ -262,6 +283,7 @@ final class GazeTracker: NSObject, ObservableObject {
 
         let yawDelta = abs(locked.yaw - baseYaw)
         let pitchDelta = abs(locked.pitch - basePitch)
+        lastYawDelta = yawDelta
 
         // Head turned off the calibrated neutral — to the side (yaw) or down
         // (pitch). Below this gate (incl. the 18–40° "peek" band) the bar stays
@@ -289,7 +311,13 @@ final class GazeTracker: NSObject, ObservableObject {
         // Eyes shut (both) advances the bar regardless of head pose — no peek
         // possible blind, so it skips the gaze guard. Takes priority over the
         // turn/peek decision. The debounce in evaluate() ignores quick blinks.
-        let eyesClosed = config.eyesClosedEnabled && locked.eyeBlink >= config.eyeClosedThreshold
+        // Distance + pitch gates: ARKit's eyeBlink blendShape reads high with
+        // eyes OPEN when the face is far (low-res mesh) or tilted up/down (lid
+        // occludes the iris) — only trust it near and near-neutral pitch.
+        let eyesClosed = config.eyesClosedEnabled
+            && locked.eyeBlink >= config.eyeClosedThreshold
+            && locked.distanceM <= config.eyeClosedMaxDistanceM
+            && pitchDelta <= config.eyeClosedMaxPitchDeltaDeg
         if eyesClosed {
             evaluate(.eyesClosed)
             return

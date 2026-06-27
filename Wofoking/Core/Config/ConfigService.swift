@@ -47,7 +47,15 @@ final class ConfigService {
     var eyesClosedEnabled = true
     /// Both-eye blink blendShape (0..1, min of left/right) at/above this counts
     /// as eyes shut. Min = the MORE-OPEN eye, so a one-eye peek never registers.
-    var eyeClosedThreshold: Double = 0.55
+    var eyeClosedThreshold: Double = 0.65
+    /// Eyes-closed is only trusted when the face is at most this far (metres).
+    /// Past it the mesh is too low-res → `eyeBlink` drifts high with eyes OPEN
+    /// (the "too far reads as eyes shut" bug). Beyond range → never eyesClosed.
+    var eyeClosedMaxDistanceM: Double = 0.6
+    /// Eyes-closed is only trusted within this pitch delta (deg) off the
+    /// calibrated neutral. Head tilted up/down makes TrueDepth read the lid as
+    /// half-shut with eyes OPEN (the "head up reads as eyes shut" bug).
+    var eyeClosedMaxPitchDeltaDeg: Double = 20
     /// Stable duration before a gaze state flips (anti-flicker / blink grace).
     /// Also separates a quick involuntary blink from an intentional eyes-shut.
     var debounceSeconds: TimeInterval = 0.30

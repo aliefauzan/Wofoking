@@ -93,9 +93,9 @@ final class GameVM: ObservableObject {
                 if g == .lookingAtScreen || g == .lookingAway {
                     if stableSince == nil { stableSince = Date() }
                     if let s = stableSince,
-                       Date().timeIntervalSince(s) >= ConfigService.shared.calibrationStableSeconds {
+                       Date().timeIntervalSince(s) >= ConfigService.shared.calibrationStableSeconds,
+                       self.gaze.lockCurrentFace() {   // retry next frame if mid-blink
                         t.invalidate()
-                        self.gaze.lockCurrentFace()
                         self.startPlaying()
                     }
                 } else {
@@ -117,6 +117,7 @@ final class GameVM: ObservableObject {
     func giveUp() { engine.giveUp() }
 
     func retry() {
+        gaze.lockCurrentFace()   // re-baseline; player may have moved since first lock
         engine.startLevel(level)
         phase = .playing
     }
