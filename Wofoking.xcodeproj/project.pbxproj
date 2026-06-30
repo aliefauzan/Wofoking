@@ -7,27 +7,27 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		A04592B22FECF7B800E064CC /* Wofoking Watch App Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A04592B12FECF7B800E064CC /* Wofoking Watch App Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		A05E1AB92FEDAE1800CD9F14 /* Wofoking Watch Watch App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = A05E1AAF2FEDAE1700CD9F14 /* Wofoking Watch Watch App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
-		A04592B32FECF7B800E064CC /* PBXContainerItemProxy */ = {
+		A05E1AB72FEDAE1800CD9F14 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A04591562FECE16500E064CC /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = A04592B02FECF7B800E064CC;
-			remoteInfo = "Wofoking Watch App Watch App";
+			remoteGlobalIDString = A05E1AAE2FEDAE1700CD9F14;
+			remoteInfo = "Wofoking Watch Watch App";
 		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		A04592BF2FECF7B900E064CC /* Embed Watch Content */ = {
+		A05E1ABD2FEDAE1800CD9F14 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
 			dstSubfolderSpec = 16;
 			files = (
-				A04592B22FECF7B800E064CC /* Wofoking Watch App Watch App.app in Embed Watch Content */,
+				A05E1AB92FEDAE1800CD9F14 /* Wofoking Watch Watch App.app in Embed Watch Content */,
 			);
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -36,19 +36,8 @@
 
 /* Begin PBXFileReference section */
 		A045915E2FECE16500E064CC /* Wofoking.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wofoking.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		A04592AC2FECF7B800E064CC /* Wofoking Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wofoking Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		A04592B12FECF7B800E064CC /* Wofoking Watch App Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wofoking Watch App Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		A05E1AAF2FEDAE1700CD9F14 /* Wofoking Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wofoking Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		A04592CD2FED10AD00E064CC /* Exceptions for "Wofoking Watch App Watch App" folder in "Wofoking Watch App Watch App" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				"Wofoking-Watch-App-Watch-App-Info.plist",
-			);
-			target = A04592B02FECF7B800E064CC /* Wofoking Watch App Watch App */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A04591602FECE16500E064CC /* Wofoking */ = {
@@ -56,12 +45,9 @@
 			path = Wofoking;
 			sourceTree = "<group>";
 		};
-		A04592B52FECF7B800E064CC /* Wofoking Watch App Watch App */ = {
+		A05E1AB02FEDAE1700CD9F14 /* Wofoking Watch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				A04592CD2FED10AD00E064CC /* Exceptions for "Wofoking Watch App Watch App" folder in "Wofoking Watch App Watch App" target */,
-			);
-			path = "Wofoking Watch App Watch App";
+			path = "Wofoking Watch Watch App";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -74,7 +60,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A04592AE2FECF7B800E064CC /* Frameworks */ = {
+		A05E1AAC2FEDAE1700CD9F14 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -88,7 +74,7 @@
 			isa = PBXGroup;
 			children = (
 				A04591602FECE16500E064CC /* Wofoking */,
-				A04592B52FECF7B800E064CC /* Wofoking Watch App Watch App */,
+				A05E1AB02FEDAE1700CD9F14 /* Wofoking Watch Watch App */,
 				A045915F2FECE16500E064CC /* Products */,
 			);
 			sourceTree = "<group>";
@@ -97,8 +83,7 @@
 			isa = PBXGroup;
 			children = (
 				A045915E2FECE16500E064CC /* Wofoking.app */,
-				A04592AC2FECF7B800E064CC /* Wofoking Watch App.app */,
-				A04592B12FECF7B800E064CC /* Wofoking Watch App Watch App.app */,
+				A05E1AAF2FEDAE1700CD9F14 /* Wofoking Watch Watch App.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -113,10 +98,12 @@
 				A045915A2FECE16500E064CC /* Sources */,
 				A045915B2FECE16500E064CC /* Frameworks */,
 				A045915C2FECE16500E064CC /* Resources */,
+				A05E1ABD2FEDAE1800CD9F14 /* Embed Watch Content */,
 			);
 			buildRules = (
 			);
 			dependencies = (
+				A05E1AB82FEDAE1800CD9F14 /* PBXTargetDependency */,
 			);
 			fileSystemSynchronizedGroups = (
 				A04591602FECE16500E064CC /* Wofoking */,
@@ -128,45 +115,26 @@
 			productReference = A045915E2FECE16500E064CC /* Wofoking.app */;
 			productType = "com.apple.product-type.application";
 		};
-		A04592AB2FECF7B800E064CC /* Wofoking Watch App */ = {
+		A05E1AAE2FEDAE1700CD9F14 /* Wofoking Watch Watch App */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = A04592C02FECF7B900E064CC /* Build configuration list for PBXNativeTarget "Wofoking Watch App" */;
+			buildConfigurationList = A05E1ABA2FEDAE1800CD9F14 /* Build configuration list for PBXNativeTarget "Wofoking Watch Watch App" */;
 			buildPhases = (
-				A04592AA2FECF7B800E064CC /* Resources */,
-				A04592BF2FECF7B900E064CC /* Embed Watch Content */,
-			);
-			buildRules = (
-			);
-			dependencies = (
-				A04592B42FECF7B800E064CC /* PBXTargetDependency */,
-			);
-			name = "Wofoking Watch App";
-			packageProductDependencies = (
-			);
-			productName = "Wofoking Watch App";
-			productReference = A04592AC2FECF7B800E064CC /* Wofoking Watch App.app */;
-			productType = "com.apple.product-type.application.watchapp2-container";
-		};
-		A04592B02FECF7B800E064CC /* Wofoking Watch App Watch App */ = {
-			isa = PBXNativeTarget;
-			buildConfigurationList = A04592BC2FECF7B900E064CC /* Build configuration list for PBXNativeTarget "Wofoking Watch App Watch App" */;
-			buildPhases = (
-				A04592AD2FECF7B800E064CC /* Sources */,
-				A04592AE2FECF7B800E064CC /* Frameworks */,
-				A04592AF2FECF7B800E064CC /* Resources */,
+				A05E1AAB2FEDAE1700CD9F14 /* Sources */,
+				A05E1AAC2FEDAE1700CD9F14 /* Frameworks */,
+				A05E1AAD2FEDAE1700CD9F14 /* Resources */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				A04592B52FECF7B800E064CC /* Wofoking Watch App Watch App */,
+				A05E1AB02FEDAE1700CD9F14 /* Wofoking Watch Watch App */,
 			);
-			name = "Wofoking Watch App Watch App";
+			name = "Wofoking Watch Watch App";
 			packageProductDependencies = (
 			);
-			productName = "Wofoking Watch App Watch App";
-			productReference = A04592B12FECF7B800E064CC /* Wofoking Watch App Watch App.app */;
+			productName = "Wofoking Watch Watch App";
+			productReference = A05E1AAF2FEDAE1700CD9F14 /* Wofoking Watch Watch App.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -182,10 +150,7 @@
 					A045915D2FECE16500E064CC = {
 						CreatedOnToolsVersion = 26.5;
 					};
-					A04592AB2FECF7B800E064CC = {
-						CreatedOnToolsVersion = 26.5;
-					};
-					A04592B02FECF7B800E064CC = {
+					A05E1AAE2FEDAE1700CD9F14 = {
 						CreatedOnToolsVersion = 26.5;
 					};
 				};
@@ -205,8 +170,7 @@
 			projectRoot = "";
 			targets = (
 				A045915D2FECE16500E064CC /* Wofoking */,
-				A04592AB2FECF7B800E064CC /* Wofoking Watch App */,
-				A04592B02FECF7B800E064CC /* Wofoking Watch App Watch App */,
+				A05E1AAE2FEDAE1700CD9F14 /* Wofoking Watch Watch App */,
 			);
 		};
 /* End PBXProject section */
@@ -219,14 +183,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A04592AA2FECF7B800E064CC /* Resources */ = {
-			isa = PBXResourcesBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-		};
-		A04592AF2FECF7B800E064CC /* Resources */ = {
+		A05E1AAD2FEDAE1700CD9F14 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -243,7 +200,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
-		A04592AD2FECF7B800E064CC /* Sources */ = {
+		A05E1AAB2FEDAE1700CD9F14 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -253,10 +210,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		A04592B42FECF7B800E064CC /* PBXTargetDependency */ = {
+		A05E1AB82FEDAE1800CD9F14 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = A04592B02FECF7B800E064CC /* Wofoking Watch App Watch App */;
-			targetProxy = A04592B32FECF7B800E064CC /* PBXContainerItemProxy */;
+			target = A05E1AAE2FEDAE1700CD9F14 /* Wofoking Watch Watch App */;
+			targetProxy = A05E1AB72FEDAE1800CD9F14 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -401,6 +358,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -437,6 +395,7 @@
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 26.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -454,27 +413,29 @@
 			};
 			name = Release;
 		};
-		A04592BD2FECF7B900E064CC /* Debug */ = {
+		A05E1ABB2FEDAE1800CD9F14 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch App Watch App/Wofoking Watch App Watch App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch Watch App/Wofoking Watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wofoking-Watch-App-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch App";
+				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Load Away reads your live heart rate (optional) only to make the loading bar more dramatic. Load Away is not a medical or fitness app.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKWatchOnly = YES;
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.af.Wofoking;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.af.Wofoking-Watch-App.watchkitapp";
+				PRODUCT_BUNDLE_IDENTIFIER = com.af.Wofoking.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -485,31 +446,33 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.5;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Debug;
 		};
-		A04592BE2FECF7B900E064CC /* Release */ = {
+		A05E1ABC2FEDAE1800CD9F14 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
-				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch App Watch App/Wofoking Watch App Watch App.entitlements";
+				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch Watch App/Wofoking Watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = "Wofoking-Watch-App-Watch-App-Info.plist";
-				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch App";
+				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch";
+				INFOPLIST_KEY_NSHealthShareUsageDescription = "Load Away reads your live heart rate (optional) only to make the loading bar more dramatic. Load Away is not a medical or fitness app.";
+				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
-				INFOPLIST_KEY_WKWatchOnly = YES;
+				INFOPLIST_KEY_WKApplication = YES;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.af.Wofoking;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.af.Wofoking-Watch-App.watchkitapp";
+				PRODUCT_BUNDLE_IDENTIFIER = com.af.Wofoking.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -520,39 +483,7 @@
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				WATCHOS_DEPLOYMENT_TARGET = 26.5;
-			};
-			name = Release;
-		};
-		A04592C12FECF7B900E064CC /* Debug */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
-				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch App";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.af.Wofoking-Watch-App";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
-			};
-			name = Debug;
-		};
-		A04592C22FECF7B900E064CC /* Release */ = {
-			isa = XCBuildConfiguration;
-			buildSettings = {
-				CODE_SIGN_STYLE = Automatic;
-				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
-				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch App";
-				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "com.af.Wofoking-Watch-App";
-				PRODUCT_NAME = "$(TARGET_NAME)";
-				SWIFT_APPROACHABLE_CONCURRENCY = YES;
-				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
-				SWIFT_VERSION = 5.0;
+				WATCHOS_DEPLOYMENT_TARGET = 26.0;
 			};
 			name = Release;
 		};
@@ -577,20 +508,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		A04592BC2FECF7B900E064CC /* Build configuration list for PBXNativeTarget "Wofoking Watch App Watch App" */ = {
+		A05E1ABA2FEDAE1800CD9F14 /* Build configuration list for PBXNativeTarget "Wofoking Watch Watch App" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				A04592BD2FECF7B900E064CC /* Debug */,
-				A04592BE2FECF7B900E064CC /* Release */,
-			);
-			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
-		};
-		A04592C02FECF7B900E064CC /* Build configuration list for PBXNativeTarget "Wofoking Watch App" */ = {
-			isa = XCConfigurationList;
-			buildConfigurations = (
-				A04592C12FECF7B900E064CC /* Debug */,
-				A04592C22FECF7B900E064CC /* Release */,
+				A05E1ABB2FEDAE1800CD9F14 /* Debug */,
+				A05E1ABC2FEDAE1800CD9F14 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -66,6 +66,36 @@ final class ConfigService {
     /// Continuous look-at-screen time before the Give Up button reveals.
     var giveUpRevealSeconds: TimeInterval = 5.0
 
+    // MARK: Single-player lock (one face only)
+
+    /// Re-acquire the locked player by face geometry when ARKit drops the
+    /// original anchor (a turn-away / re-detect hands back a NEW anchor UUID).
+    /// Only a face whose size signature matches the locked player rebinds the
+    /// lock — bystanders never match, so the lock can't jump to another person.
+    /// NOT biometric Face ID (no public API) — a geometric fingerprint that
+    /// separates the seated player from bystanders, not a security-grade match.
+    var faceMatchEnabled = true
+    /// Max relative difference (0…1) in face WIDTH and DEPTH for a present face
+    /// to count as the SAME locked player. Looser → re-acquires through more
+    /// expression/distance change but risks matching a similar-sized bystander;
+    /// tighter → stricter identity but may fail to re-lock the real player.
+    var faceMatchToleranceRatio: Double = 0.15
+
+    // MARK: Frozen-mesh guard
+
+    /// A live ARKit face micro-jitters every frame. If the locked face's pose
+    /// is unchanged for this long, the mesh is STUCK (a stale anchor is being
+    /// replayed) — its last pose is often a turn, which would peg the bar to a
+    /// false "lookingAway". A frozen mesh is treated as faceLost so the bar
+    /// pauses instead of advancing on dead data.
+    var staleFaceSeconds: TimeInterval = 0.8
+    /// Per-frame yaw/pitch change (deg) at/below which the pose counts as "not
+    /// moving" for the frozen-mesh guard. Set below TrueDepth's jitter floor so
+    /// only a bit-identical replayed anchor trips it, never a live still face.
+    var staleFaceEpsilonDeg: Double = 0.02
+    /// Distance change (m) at/below which counts as "not moving" (frozen guard).
+    var staleFaceEpsilonM: Double = 0.0005
+
     // MARK: Per-level rules
 
     func rules(for level: Level) -> LevelRules {

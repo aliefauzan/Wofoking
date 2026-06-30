@@ -39,7 +39,11 @@ final class MockingService: ObservableObject {
         self.ai = ai ?? FoundationModelsMockProvider()
     }
 
-    /// Show a static line immediately; speak it; then try to refine via AI.
+    /// Show a static line immediately and speak it in the Tes voice; then refine
+    /// the on-screen text via AI. The refinement is **caption-only** — it is not
+    /// spoken, because only static bank lines have a pre-generated Tes clip and
+    /// the device can't synthesise new audio at runtime. This keeps one clean,
+    /// zero-latency Tes utterance per event with no voice mismatch.
     @discardableResult
     func emit(_ context: MockContext,
               progress: Double = 0,
@@ -58,8 +62,7 @@ final class MockingService: ObservableObject {
                 let refined = await ai.line(context, progress: progress,
                                             failCount: failCount, language: language)
                 guard let self, let refined, token == self.emitToken else { return }
-                self.currentLine = refined
-                if speak { VoiceService.shared.speak(refined, language: language) }
+                self.currentLine = refined   // caption-only; the Tes clip already spoke
             }
         }
         return staticLine

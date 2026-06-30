@@ -37,10 +37,11 @@ final class HeartRateService: NSObject, ObservableObject {
     private let healthStore = HKHealthStore()
     #endif
 
-    // Rolling baseline via exponential moving average.
+    // Resting baseline = lowest BPM seen this session. It only drops, never
+    // chases the value up — an EMA baseline climbed to meet a sustained spike
+    // and flipped `isElevated` back off while the heart was still pounding.
     private var baseline: Double?
-    private let emaAlpha = 0.1
-    private let elevatedRatio = 1.10   // 10% over baseline = "pressure"
+    private let elevatedRatio = 1.10   // 10% over resting low = "pressure"
 
     private override init() {
         super.init()
@@ -79,16 +80,16 @@ final class HeartRateService: NSObject, ObservableObject {
     // MARK: Ingest
 
     private func ingest(_ value: Double) {
-        print("[HR][iOS] ingest value=\(value) enabled=\(enabled)")
         guard enabled, value > 0 else { return }
         bpm = Int(value.rounded())
         isStreaming = true
 
         if let b = baseline {
-            baseline = b * (1 - emaAlpha) + value * emaAlpha
-            isElevated = value > b * elevatedRatio
+            let resting = min(b, value)   // track the true resting low, never up
+            baseline = resting
+            isElevated = value > resting * elevatedRatio
         } else {
-            baseline = value          // first sample seeds the baseline
+            baseline = value              // first sample seeds the resting low
             isElevated = false
         }
     }
@@ -125,7 +126,6 @@ extension HeartRateService: WCSessionDelegate {
     }
 
     private nonisolated func handle(_ payload: [String: Any]) {
-        print("[HR][iOS] rx keys=\(payload.keys.sorted())")
         if let value = payload[HRKey.bpm] as? Double {
             Task { @MainActor in self.ingest(value) }
         }

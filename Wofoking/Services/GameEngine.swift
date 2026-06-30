@@ -138,6 +138,27 @@ final class GameEngine: ObservableObject {
             canGiveUp = false
         }
 
+        // Face lost → safe pause, never a win (PRD §14). Checked BEFORE the
+        // HR / frustration / peek taunts so a lost or backgrounded face can't
+        // fire haptics, voice, or a bar knock.
+        if g == .faceLost {
+            if state != .faceLost {
+                state = .faceLost
+                mocking.emit(.inviteLookBack, speak: false, language: language)
+            }
+            return
+        }
+        if state == .faceLost {
+            // Recovered. If the bar was already full, restore the win window —
+            // a face-loss at 100% must not silently void the win — else resume.
+            if loader.progress >= 100 {
+                state = .reached100
+                windowStart = Date()
+            } else {
+                state = .lookingAtScreen
+            }
+        }
+
         // Heart-rate driven volatility (L2): elevated BPM → more chaotic bar.
         let elevated = persistence.settings.heartRateEnabled && HeartRateService.shared.isElevated
         loader.heartRateHigh = elevated
@@ -162,16 +183,6 @@ final class GameEngine: ObservableObject {
         } else {
             lastPeekCount = gaze.peekCount
         }
-
-        // Face lost → safe pause, never a win (PRD §14).
-        if g == .faceLost {
-            if state != .faceLost {
-                state = .faceLost
-                mocking.emit(.inviteLookBack, speak: false, language: language)
-            }
-            return
-        }
-        if state == .faceLost { state = .lookingAtScreen } // recovered
 
         switch state {
         case .reached100:

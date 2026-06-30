@@ -84,7 +84,6 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
                                       HRKey.timestamp: Date().timeIntervalSince1970,
                                       HRKey.streaming: true]
         let s = WCSession.default
-        print("[HR][watch] push bpm=\(value) act=\(s.activationState.rawValue) reachable=\(s.isReachable)")
         guard s.activationState == .activated else { return }
         if s.isReachable {
             s.sendMessage(payload, replyHandler: nil, errorHandler: nil)
