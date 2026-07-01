@@ -32,6 +32,13 @@ struct WofokingApp: App {
             // Keep the screen awake while the app is in front; restore the
             // normal auto-lock when backgrounded/inactive.
             UIApplication.shared.isIdleTimerDisabled = (phase == .active)
+            // Re-wake the watch on every foreground return (not only cold
+            // launch): if the phone was backgrounded the watch app closes, so
+            // re-fire startWatchApp so BPM resumes without playing. Gated on the
+            // HR setting; enable() is idempotent.
+            if phase == .active, PersistenceStore.shared.settings.heartRateEnabled {
+                HeartRateService.shared.enable()
+            }
         }
     }
 }
