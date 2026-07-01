@@ -39,6 +39,16 @@
 		A05E1AAF2FEDAE1700CD9F14 /* Wofoking Watch Watch App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wofoking Watch Watch App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		A01B81BF2FF4961C004CC472 /* Exceptions for "Wofoking Watch Watch App" folder in "Wofoking Watch Watch App" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Wofoking-Watch-Watch-App-Info.plist",
+			);
+			target = A05E1AAE2FEDAE1700CD9F14 /* Wofoking Watch Watch App */;
+		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		A04591602FECE16500E064CC /* Wofoking */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
@@ -47,6 +57,9 @@
 		};
 		A05E1AB02FEDAE1700CD9F14 /* Wofoking Watch Watch App */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				A01B81BF2FF4961C004CC472 /* Exceptions for "Wofoking Watch Watch App" folder in "Wofoking Watch Watch App" target */,
+			);
 			path = "Wofoking Watch Watch App";
 			sourceTree = "<group>";
 		};
@@ -424,6 +437,7 @@
 				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Wofoking-Watch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Load Away reads your live heart rate (optional) only to make the loading bar more dramatic. Load Away is not a medical or fitness app.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";
@@ -461,6 +475,7 @@
 				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = "Wofoking-Watch-Watch-App-Info.plist";
 				INFOPLIST_KEY_CFBundleDisplayName = "Wofoking Watch";
 				INFOPLIST_KEY_NSHealthShareUsageDescription = "Load Away reads your live heart rate (optional) only to make the loading bar more dramatic. Load Away is not a medical or fitness app.";
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";

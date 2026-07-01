@@ -20,6 +20,12 @@ struct WofokingApp: App {
                 .task {
                     _ = HeartRateService.shared
                     VoiceService.shared.enabled = PersistenceStore.shared.settings.voiceMockingEnabled
+                    // Auto-launch the watch companion at app open (not only at
+                    // level start), so the watch streams BPM without the player
+                    // opening the watch app by hand. enable() → startWatchApp.
+                    if PersistenceStore.shared.settings.heartRateEnabled {
+                        HeartRateService.shared.enable()
+                    }
                 }
         }
         .onChange(of: scenePhase) { _, phase in

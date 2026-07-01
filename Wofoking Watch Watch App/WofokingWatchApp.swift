@@ -10,7 +10,9 @@ import SwiftUI
 
 @main
 struct WofokingWatchApp: App {
-    @StateObject private var hr = WatchHeartRateManager()
+    // Adaptor delivers the remote startWatchApp launch to handle(_:).
+    @WKApplicationDelegateAdaptor(WatchAppDelegate.self) private var delegate
+    @StateObject private var hr = WatchHeartRateManager.shared
     var body: some Scene {
         WindowGroup {
             WatchContentView(hr: hr)

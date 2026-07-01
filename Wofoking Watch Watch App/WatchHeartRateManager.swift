@@ -16,6 +16,10 @@ import WatchConnectivity
 @MainActor
 final class WatchHeartRateManager: NSObject, ObservableObject {
 
+    // Shared so the WKApplicationDelegate's handle(_:) (background launch via
+    // startWatchApp) and WatchContentView (manual open) drive one instance.
+    static let shared = WatchHeartRateManager()
+
     @Published private(set) var bpm: Int?
     @Published private(set) var isRunning = false
 
@@ -33,20 +37,29 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
 
     // MARK: Control
 
-    func start() {
+    /// `config` is supplied when launched remotely via `startWatchApp` (passed
+    /// to the WKApplicationDelegate's `handle(_:)`); nil on manual open.
+    func start(with config: HKWorkoutConfiguration? = nil) {
         guard !isRunning, HKHealthStore.isHealthDataAvailable() else { return }
         let hrType = HKQuantityType(.heartRate)
         healthStore.requestAuthorization(toShare: [HKQuantityType.workoutType()],
-                                         read: [hrType]) { [weak self] ok, _ in
+                                         read: [hrType]) { ok, _ in
+            // [weak self] on the Task (not the outer closure) avoids capturing
+            // a mutable var across the concurrent hop (Swift 6 error).
             guard ok else { return }
-            Task { @MainActor in self?.beginWorkout() }
+            Task { @MainActor [weak self] in self?.beginWorkout(config: config) }
         }
     }
 
-    private func beginWorkout() {
-        let config = HKWorkoutConfiguration()
-        config.activityType = .other
-        config.locationType = .unknown
+    private func beginWorkout(config incoming: HKWorkoutConfiguration? = nil) {
+        // Reuse the remote config if provided, else build a default. Either way
+        // starting the session foregrounds the app after a startWatchApp launch.
+        let config: HKWorkoutConfiguration
+        if let incoming { config = incoming } else {
+            config = HKWorkoutConfiguration()
+            config.activityType = .other
+            config.locationType = .unknown
+        }
         do {
             let session = try HKWorkoutSession(healthStore: healthStore, configuration: config)
             let builder = session.associatedWorkoutBuilder()
@@ -69,8 +82,10 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
     func stop() {
         guard isRunning else { return }
         session?.end()
-        builder?.endCollection(withEnd: Date()) { [weak self] _, _ in
-            self?.builder?.finishWorkout { _, _ in }
+        builder?.endCollection(withEnd: Date()) { _, _ in
+            // builder is MainActor-isolated; hop back before touching it from
+            // this Sendable completion (was a hard error).
+            Task { @MainActor [weak self] in self?.builder?.finishWorkout { _, _ in } }
         }
         isRunning = false
         send(streaming: false)

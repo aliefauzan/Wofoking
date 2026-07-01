@@ -55,9 +55,13 @@ final class HeartRateService: NSObject, ObservableObject {
 
     func enable() {
         enabled = true
-        requestAuthorization()
-        // Ask the watch app to start streaming if reachable.
-        sendCommandToWatch(start: true)
+        // Request auth, THEN wake the watch from the completion. startWatchApp
+        // needs workout-share auth already resolved; firing it before the first
+        // grant resolves silently fails (cold-install "watch never opens" bug).
+        // WCSession.sendMessage can't launch a closed watch app (needs
+        // isReachable) — startWatchApp(with:) is the only sanctioned remote
+        // launch, booting the app to run its HKWorkoutSession (onAppear streams).
+        requestAuthorizationThenLaunch()
     }
 
     func disable() {
@@ -69,11 +73,35 @@ final class HeartRateService: NSObject, ObservableObject {
         sendCommandToWatch(start: false)
     }
 
-    private func requestAuthorization() {
+    private func requestAuthorizationThenLaunch() {
         #if canImport(HealthKit)
         guard HKHealthStore.isHealthDataAvailable() else { return }
         let hr = HKQuantityType(.heartRate)
-        healthStore.requestAuthorization(toShare: [], read: [hr]) { _, _ in }
+        // Share workoutType too: startWatchApp(with:) requires workout share
+        // auth on iOS. Needs INFOPLIST_KEY_NSHealthUpdateUsageDescription on the
+        // iOS target or it crashes (NSHealthUpdateUsageDescription must be set).
+        healthStore.requestAuthorization(toShare: [HKQuantityType.workoutType()],
+                                         read: [hr]) { ok, _ in
+            // ok == true means the auth flow finished (granted or already set) —
+            // safe to launch now. nonisolated completion → hop to MainActor.
+            guard ok else { return }
+            // Use the singleton directly — capturing weak self in this @Sendable
+            // completion is a Swift 6 concurrency error.
+            Task { @MainActor in HeartRateService.shared.launchWatchWorkout() }
+        }
+        #endif
+    }
+
+    /// Launch the watch companion to start its workout/heart-rate stream.
+    /// Real paired hardware only; no-op on Simulator / no watch (PRD §14:
+    /// game runs normally without HR).
+    private func launchWatchWorkout() {
+        #if canImport(HealthKit) && os(iOS)
+        guard HKHealthStore.isHealthDataAvailable() else { return }
+        let config = HKWorkoutConfiguration()   // must match the watch's beginWorkout()
+        config.activityType = .other
+        config.locationType = .unknown
+        healthStore.startWatchApp(with: config) { _, _ in }
         #endif
     }
 

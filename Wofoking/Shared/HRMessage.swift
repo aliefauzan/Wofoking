@@ -8,8 +8,11 @@
 
 import Foundation
 
+// nonisolated: under SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor these constants
+// would be MainActor-isolated, but the WCSession delegate reads them from
+// nonisolated callbacks. Plain Sendable Strings — safe to mark nonisolated.
 enum HRKey {
-    static let bpm = "bpm"           // Double — beats per minute
-    static let timestamp = "ts"      // TimeInterval — sample time
-    static let streaming = "stream"  // Bool — watch workout active
+    nonisolated static let bpm = "bpm"           // Double — beats per minute
+    nonisolated static let timestamp = "ts"      // TimeInterval — sample time
+    nonisolated static let streaming = "stream"  // Bool — watch workout active
 }
