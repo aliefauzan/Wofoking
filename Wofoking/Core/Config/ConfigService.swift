@@ -171,4 +171,24 @@ final class ConfigService {
 
     /// % per second the bar falls during the over-loading penalty.
     var penaltyDropPerSecond: Double = 14
+
+    // MARK: Face-scan glitch (VISUAL ONLY — never touches gaze/tracking state)
+
+    /// Number of times the detection reticle "glitches" to a random nearby
+    /// spot after a stable face is detected, before it settles. 2…4 feels
+    /// intentional-creepy without reading as a broken app.
+    var glitchJumpCount: Int = 3
+    /// How long each glitch jump holds (seconds). Kept short (100–300 ms).
+    var glitchJumpSeconds: TimeInterval = 0.16
+    /// Max random offset (points) the reticle jumps from its resting centre.
+    var glitchMaxOffset: Double = 90
+    /// Settle pause after the reticle snaps back before advancing to the story.
+    var glitchSettleSeconds: TimeInterval = 0.9
+
+    // MARK: Storyline (static horror-satire intro before gameplay)
+
+    /// Delay between storyline lines appearing one-by-one.
+    var storyLineInterval: TimeInterval = 1.5
+    /// Delay after the final line before auto-continuing into gameplay.
+    var storyAutoContinueSeconds: TimeInterval = 2.2
 }

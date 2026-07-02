@@ -13,6 +13,8 @@ enum L10nKey: String {
     case language, theme, heartRate, voiceMocking
     case deleteConfirmTitle, yes, no
     case faceLookAway, faceLookBack, faceCalibrating, faceLost, noFace
+    case faceScanInstruction, faceScanInstructionSecondary, faceScanTooMany
+    case glitchWait, glitchNotYou, glitchDetected
     case cameraDeniedTitle, cameraDeniedBody, openSettings
     case unsupportedDevice
     case lives, win, levelLocked
@@ -29,6 +31,30 @@ struct Localization {
         return table[key] ?? Self.en[key] ?? key.rawValue
     }
 
+    /// Static storyline shown after a stable face is detected, before gameplay.
+    /// Revealed one line at a time by `StorylineView`.
+    var storyLines: [String] {
+        language == .indonesian ? Self.storyID : Self.storyEN
+    }
+
+    private static let storyEN = [
+        "One face detected.",
+        "Good.",
+        "The loading bar knows you are watching.",
+        "It will not move while you stare.",
+        "Look away when it begins.",
+        "And look back before it is too late.",
+    ]
+
+    private static let storyID = [
+        "Satu wajah terdeteksi.",
+        "Bagus.",
+        "Loading bar tahu kamu sedang menonton.",
+        "Ia tak akan bergerak selama kamu menatap.",
+        "Menoleh saat ia mulai.",
+        "Dan menoleh kembali sebelum terlambat.",
+    ]
+
     private static let en: [L10nKey: String] = [
         .start: "Start", .level: "Level", .deleteApp: "Delete App",
         .settings: "Settings", .back: "Back", .retry: "Retry",
@@ -42,6 +68,12 @@ struct Localization {
         .faceCalibrating: "Hold still…",
         .faceLost: "Come back to the camera.",
         .noFace: "I can't annoy you if I can't see you.",
+        .faceScanInstruction: "Keep only one face in the frame.",
+        .faceScanInstructionSecondary: "The loading bar gets confused when it sees company.",
+        .faceScanTooMany: "Too many faces. One is enough.",
+        .glitchWait: "Wait.",
+        .glitchNotYou: "That was not you.",
+        .glitchDetected: "Face detected.",
         .cameraDeniedTitle: "Camera Needed",
         .cameraDeniedBody: "Load Away uses your camera only to detect whether you are looking at the screen during gameplay. No face data is stored.",
         .openSettings: "Open Settings",
@@ -70,6 +102,12 @@ struct Localization {
         .faceCalibrating: "Diam dulu…",
         .faceLost: "Kembali ke kamera.",
         .noFace: "Aku tak bisa mengganggumu kalau tak melihatmu.",
+        .faceScanInstruction: "Jaga hanya satu wajah di dalam frame.",
+        .faceScanInstructionSecondary: "Loading bar bingung kalau melihat ada teman.",
+        .faceScanTooMany: "Terlalu banyak wajah. Satu saja cukup.",
+        .glitchWait: "Tunggu.",
+        .glitchNotYou: "Itu bukan kamu.",
+        .glitchDetected: "Wajah terdeteksi.",
         .cameraDeniedTitle: "Butuh Kamera",
         .cameraDeniedBody: "Load Away memakai kamera hanya untuk mendeteksi apakah kamu melihat layar saat bermain. Tidak ada data wajah yang disimpan.",
         .openSettings: "Buka Pengaturan",

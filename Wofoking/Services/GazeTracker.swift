@@ -71,6 +71,10 @@ final class GazeTracker: NSObject, ObservableObject {
     @Published private(set) var peekCount = 0
     /// True while the player holds a frustrated scowl (browDown + frown/press).
     @Published private(set) var isFrustrated = false
+    /// Number of tracked faces currently visible. Session already tracks up to
+    /// 3 faces (see `start()`), so this is a free read used only by the
+    /// face-scan UI to warn "too many faces" — it never gates gameplay.
+    @Published private(set) var visibleFaceCount = 0
     /// True only on hardware that supports ARKit face tracking.
     let isSupported: Bool
 
@@ -317,6 +321,9 @@ final class GazeTracker: NSObject, ObservableObject {
 
     /// Apply tracked samples and update the (debounced) gaze state.
     private func process(_ samples: [FaceSample]) {
+        let tracked = samples.filter { $0.tracked }.count
+        if tracked != visibleFaceCount { visibleFaceCount = tracked }
+
         // Before lock: report presence so calibration can proceed.
         guard let id = lockedAnchorID else {
             evaluate(samples.contains { $0.tracked } ? .lookingAtScreen : .noFace)

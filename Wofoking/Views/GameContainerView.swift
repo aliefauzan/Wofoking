@@ -31,8 +31,10 @@ struct GameContainerView: View {
     var body: some View {
         ZStack {
             LoadAwayBackground()
-            // Real camera feed behind the gameplay HUD (PRD: real camera).
-            if vm.phase == .playing && !vm.isManual {
+            // Real camera feed behind the gameplay HUD (PRD: real camera). Also
+            // shown during the Face Scan screen so the detection reticle has the
+            // live face to sit on.
+            if (vm.phase == .playing || vm.phase == .calibrating) && !vm.isManual {
                 CameraPreviewView(tracker: vm.gaze, showFaceMesh: store.settings.debugFaceMesh)
                     .ignoresSafeArea()
                 Color.black.opacity(store.settings.debugFaceMesh ? 0.15 : 0.45)
@@ -55,7 +57,8 @@ struct GameContainerView: View {
         case .permission:   permissionPrompt
         case .denied:       deniedView
         case .unsupported, .playing: gameplay
-        case .calibrating:  calibrating
+        case .calibrating:  FaceScanView(vm: vm, loc: loc) { vm.finishFaceScan() }
+        case .storyline:    StorylineView(loc: loc) { vm.finishStoryline() }
         }
     }
 
@@ -74,13 +77,6 @@ struct GameContainerView: View {
                     UIApplication.shared.open(url)
                 }
             }.buttonStyle(.borderedProminent)
-        }
-    }
-
-    private var calibrating: some View {
-        VStack(spacing: 16) {
-            ProgressView().tint(.white)
-            Text(loc.t(.faceCalibrating)).foregroundStyle(.white).font(.headline)
         }
     }
 

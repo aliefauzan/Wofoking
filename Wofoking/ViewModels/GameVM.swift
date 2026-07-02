@@ -17,7 +17,8 @@ final class GameVM: ObservableObject {
         case permission
         case denied
         case unsupported
-        case calibrating
+        case calibrating   // Face Detection / Face Scan screen
+        case storyline     // static horror-satire intro after a stable face
         case playing
     }
 
@@ -29,6 +30,12 @@ final class GameVM: ObservableObject {
     @Published private(set) var canGiveUp = false
     @Published private(set) var gazeState: GazeState = .noFace
     @Published private(set) var peekCount = 0
+    /// Flips true once a stable face is locked, so the Face Scan screen can run
+    /// its (visual-only) glitch before advancing to the storyline.
+    @Published private(set) var faceLocked = false
+    /// Live count of visible faces, mirrored from the tracker for the
+    /// "too many faces" warning on the Face Scan screen.
+    @Published private(set) var faceCount = 0
 
     let gaze: GazeTracker
     let engine: GameEngine
@@ -51,6 +58,7 @@ final class GameVM: ObservableObject {
         engine.$peekCount.assign(to: &$peekCount)
         engine.mocking.$currentLine.assign(to: &$mockLine)
         tracker.$gaze.assign(to: &$gazeState)
+        tracker.$visibleFaceCount.assign(to: &$faceCount)
     }
 
     // MARK: Flow
@@ -71,10 +79,10 @@ final class GameVM: ObservableObject {
         case .denied:  phase = .denied
         case .granted:
             guard gaze.isSupported else {
-                // Simulator / non-TrueDepth → manual calibrate, still playable.
-                phase = .unsupported
+                // Simulator / non-TrueDepth → no face scan/glitch, but the
+                // storyline still plays so the flow stays testable, then manual.
                 gaze.manualCalibrate()
-                startPlaying()
+                phase = .storyline
                 return
             }
             phase = .calibrating
@@ -96,7 +104,9 @@ final class GameVM: ObservableObject {
                        Date().timeIntervalSince(s) >= ConfigService.shared.calibrationStableSeconds,
                        self.gaze.lockCurrentFace() {   // retry next frame if mid-blink
                         t.invalidate()
-                        self.startPlaying()
+                        // Stay on the Face Scan screen; the glitch runs off
+                        // `faceLocked`, then the view advances to the storyline.
+                        self.faceLocked = true
                     }
                 } else {
                     stableSince = nil
@@ -108,6 +118,18 @@ final class GameVM: ObservableObject {
     private func startPlaying() {
         phase = .playing
         engine.startLevel(level)
+    }
+
+    /// Called by the Face Scan screen once its glitch effect finishes.
+    func finishFaceScan() {
+        guard phase == .calibrating else { return }
+        phase = .storyline
+    }
+
+    /// Called by the storyline screen when the last line has been read.
+    func finishStoryline() {
+        guard phase == .storyline else { return }
+        startPlaying()
     }
 
     // MARK: Manual fallback control
