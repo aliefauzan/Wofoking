@@ -56,7 +56,7 @@ struct Localization {
     ]
 
     private static let en: [L10nKey: String] = [
-        .start: "Start", .level: "Level", .deleteApp: "Delete App",
+        .start: "Start", .level: "Level", .deleteApp: "Delete",
         .settings: "Settings", .back: "Back", .retry: "Retry",
         .continueGame: "Continue",
         .language: "Language", .theme: "Appearance",

@@ -10,7 +10,7 @@
 
 import Foundation
 import Combine
-import HealthKit
+@preconcurrency import HealthKit
 import WatchConnectivity
 
 @MainActor
@@ -26,6 +26,11 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
     private let healthStore = HKHealthStore()
     private var session: HKWorkoutSession?
     private var builder: HKLiveWorkoutBuilder?
+    // Synchronous latch: `isRunning` only flips true *after* the async auth
+    // callback, so two start() calls in the auth window both pass `!isRunning`
+    // and build a second HKWorkoutSession → the builders collide into HK's
+    // Error(7) wedged state. This closes that window immediately.
+    private var isStarting = false
 
     override init() {
         super.init()
@@ -40,14 +45,18 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
     /// `config` is supplied when launched remotely via `startWatchApp` (passed
     /// to the WKApplicationDelegate's `handle(_:)`); nil on manual open.
     func start(with config: HKWorkoutConfiguration? = nil) {
-        guard !isRunning, HKHealthStore.isHealthDataAvailable() else { return }
+        guard !isRunning, !isStarting, HKHealthStore.isHealthDataAvailable() else { return }
+        isStarting = true
         let hrType = HKQuantityType(.heartRate)
         healthStore.requestAuthorization(toShare: [HKQuantityType.workoutType()],
                                          read: [hrType]) { ok, _ in
             // [weak self] on the Task (not the outer closure) avoids capturing
             // a mutable var across the concurrent hop (Swift 6 error).
-            guard ok else { return }
-            Task { @MainActor [weak self] in self?.beginWorkout(config: config) }
+            Task { @MainActor [weak self] in
+                guard let self else { return }
+                guard ok else { self.isStarting = false; return }
+                self.beginWorkout(config: config)
+            }
         }
     }
 
@@ -72,23 +81,45 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
 
             let start = Date()
             session.startActivity(with: start)
-            builder.beginCollection(withStart: start) { _, _ in }
-            isRunning = true
+            builder.beginCollection(withStart: start) { [weak self] ok, _ in
+                // A failed begin leaves a builder in HK's Error(7) state; if we
+                // kept it, the next start() would build a second one on top of
+                // the wedge. Discard so a fresh session can be built next time.
+                Task { @MainActor in
+                    guard let self else { return }
+                    self.isStarting = false
+                    if ok { self.isRunning = true } else { self.teardown() }
+                }
+            }
         } catch {
-            isRunning = false
+            teardown()
         }
+    }
+
+    /// Release the session/builder so the next start() builds fresh instead of
+    /// stacking a new builder on a wedged one.
+    private func teardown() {
+        session = nil
+        builder = nil
+        isRunning = false
+        isStarting = false
     }
 
     func stop() {
         guard isRunning else { return }
-        session?.end()
-        builder?.endCollection(withEnd: Date()) { _, _ in
-            // builder is MainActor-isolated; hop back before touching it from
-            // this Sendable completion (was a hard error).
-            Task { @MainActor [weak self] in self?.builder?.finishWorkout { _, _ in } }
-        }
-        isRunning = false
+        // Grab the HK objects locally, then release our refs immediately so the
+        // next start() is clean. Drain via the async API on the MainActor —
+        // avoids the @Sendable completion closures (captured-self error) and the
+        // "use asynchronous alternative" warning of the completion-handler form.
+        let session = self.session
+        let builder = self.builder
+        teardown()
         send(streaming: false)
+        session?.end()
+        Task { @MainActor in
+            try? await builder?.endCollection(at: Date())
+            _ = try? await builder?.finishWorkout()
+        }
     }
 
     // MARK: Send to phone
@@ -137,7 +168,9 @@ extension WatchHeartRateManager: HKWorkoutSessionDelegate {
                                     from fromState: HKWorkoutSessionState, date: Date) {}
     nonisolated func workoutSession(_ workoutSession: HKWorkoutSession,
                                     didFailWithError error: Error) {
-        Task { @MainActor in self.isRunning = false }
+        // Session failed → its builder is wedged (Error(7)). Drop both so the
+        // next start() rebuilds instead of no-oping on a dead session.
+        Task { @MainActor in self.teardown() }
     }
 }
 
