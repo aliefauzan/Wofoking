@@ -91,14 +91,18 @@ final class GameVM: ObservableObject {
         }
     }
 
-    /// Hold a stable face for `calibrationStableSeconds`, then lock + play.
+    /// Require EXACTLY one face, held stable for `calibrationStableSeconds`,
+    /// then lock + advance. More than one visible face (or none) resets the
+    /// timer so the lock can't fire while a bystander is in frame — the Face
+    /// Scan screen shows the "too many faces" block until the frame is clean.
     private func waitForStableFace() {
         var stableSince: Date?
         calibrationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] t in
             Task { @MainActor in
                 guard let self else { return }
                 let g = self.gaze.gaze
-                if g == .lookingAtScreen || g == .lookingAway {
+                let single = self.gaze.visibleFaceCount == 1
+                if single && (g == .lookingAtScreen || g == .lookingAway) {
                     if stableSince == nil { stableSince = Date() }
                     if let s = stableSince,
                        Date().timeIntervalSince(s) >= ConfigService.shared.calibrationStableSeconds,

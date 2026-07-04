@@ -434,7 +434,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch Watch App/Wofoking Watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				DEVELOPMENT_TEAM = DWTZNGA7Y8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Wofoking-Watch-Watch-App-Info.plist";
@@ -443,13 +443,13 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKApplication = YES;
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.af.Wofoking;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.umar.Wofoking;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.af.Wofoking.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.umar.Wofoking.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;
@@ -472,7 +472,7 @@
 				CODE_SIGN_ENTITLEMENTS = "Wofoking Watch Watch App/Wofoking Watch Watch App.entitlements";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
-				DEVELOPMENT_TEAM = 62ZRZ6VZKC;
+				DEVELOPMENT_TEAM = DWTZNGA7Y8;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Wofoking-Watch-Watch-App-Info.plist";
@@ -481,13 +481,13 @@
 				INFOPLIST_KEY_NSHealthUpdateUsageDescription = "Load Away uses a workout session on your Apple Watch only to stream your live heart rate during gameplay.";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown";
 				INFOPLIST_KEY_WKApplication = YES;
-				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.af.Wofoking;
+				INFOPLIST_KEY_WKCompanionAppBundleIdentifier = com.umar.Wofoking;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = com.af.Wofoking.watchkitapp;
+				PRODUCT_BUNDLE_IDENTIFIER = com.umar.Wofoking.watchkitapp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = watchos;
 				SKIP_INSTALL = YES;

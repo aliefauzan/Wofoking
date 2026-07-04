@@ -61,8 +61,9 @@ final class ConfigService {
     var debounceSeconds: TimeInterval = 0.30
     /// How long the locked face may be absent before we declare faceLost.
     var faceLostGraceSeconds: TimeInterval = 1.2
-    /// Seconds of stable face required during calibration before lock.
-    var calibrationStableSeconds: TimeInterval = 1.0
+    /// Seconds of stable face required during calibration before lock. Higher =
+    /// the box lingers scanning longer before it detects/locks (feels less rushed).
+    var calibrationStableSeconds: TimeInterval = 2.5
     /// Continuous look-at-screen time before the Give Up button reveals.
     var giveUpRevealSeconds: TimeInterval = 5.0
 
@@ -174,21 +175,39 @@ final class ConfigService {
 
     // MARK: Face-scan glitch (VISUAL ONLY — never touches gaze/tracking state)
 
-    /// Number of times the detection reticle "glitches" to a random nearby
-    /// spot after a stable face is detected, before it settles. 2…4 feels
-    /// intentional-creepy without reading as a broken app.
-    var glitchJumpCount: Int = 3
-    /// How long each glitch jump holds (seconds). Kept short (100–300 ms).
-    var glitchJumpSeconds: TimeInterval = 0.16
-    /// Max random offset (points) the reticle jumps from its resting centre.
-    var glitchMaxOffset: Double = 90
-    /// Settle pause after the reticle snaps back before advancing to the story.
-    var glitchSettleSeconds: TimeInterval = 0.9
+    /// After the single face is locked, the box picks ONE top corner and jumps
+    /// face → corner → face this many times before settling. Randomised in
+    /// [min…max] so it never looks scripted.
+    var glitchJumpCountMin: Int = 4
+    var glitchJumpCountMax: Int = 6
+    /// Duration (seconds) of a single tear (face → corner, or corner → face),
+    /// randomised per jump in [min…max] so the rhythm never feels metronomic.
+    var glitchMoveMinSeconds: TimeInterval = 0.12
+    var glitchMoveMaxSeconds: TimeInterval = 0.30
+    /// Pause (seconds) the box lingers at the corner / on the face between tears,
+    /// also randomised per jump so it reads organic, not scripted.
+    var glitchHoldMinSeconds: TimeInterval = 0.18
+    var glitchHoldMaxSeconds: TimeInterval = 0.55
+    /// Per-jump random drift (points) added to the corner so it never lands on
+    /// the exact same pixel twice.
+    var glitchCornerDrift: Double = 18
+    /// Upward offset (points) of the corner the box tears to.
+    var glitchTopOffset: Double = 250
+    /// Horizontal offset (points) — the box picks EITHER the top-left OR the
+    /// top-right corner (one, for the whole sequence), never both.
+    var glitchSideOffset: Double = 165
+    /// Settle pause after the box snaps back onto the face before advancing to
+    /// the story — long enough that the locked box is clearly resting on the face.
+    var glitchSettleSeconds: TimeInterval = 1.3
 
     // MARK: Storyline (static horror-satire intro before gameplay)
 
-    /// Delay between storyline lines appearing one-by-one.
-    var storyLineInterval: TimeInterval = 1.5
+    /// Per-character delay while a sentence types out (typewriter effect).
+    var storyTypeCharSeconds: TimeInterval = 0.085
+    /// Hold after a sentence finishes typing, before the page turns to the next.
+    var storyLineInterval: TimeInterval = 1.6
+    /// Cross-fade duration when swapping one sentence page for the next.
+    var storyPageFadeSeconds: TimeInterval = 0.7
     /// Delay after the final line before auto-continuing into gameplay.
     var storyAutoContinueSeconds: TimeInterval = 2.2
 }
