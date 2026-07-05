@@ -33,34 +33,30 @@ struct StorylineView: View {
             // Plain black storyline background.
             Color.black.ignoresSafeArea()
 
-            VStack(spacing: 18) {
-                Spacer()
-
-                // Exactly one sentence on screen. `.id(pageIndex)` gives each
-                // page its own identity so the old sentence fades OUT and the
-                // new one fades IN — they never overlap or stack.
-                currentPage
-                    .id(pageIndex)
-                    .transition(.asymmetric(
-                        insertion: .opacity,
-                        removal: .opacity.combined(with: .offset(y: -14))))
-
-                Spacer()
-
-                if showContinue {
-                    Button(loc.t(.continueGame)) { advance() }
-                        .font(.headline)
-                        .foregroundStyle(.white)
-                        .padding(.horizontal, 28).padding(.vertical, 12)
-                        .background(.ultraThinMaterial, in: Capsule())
-                        .overlay(Capsule().stroke(.white.opacity(0.25)))
-                        .transition(.opacity)
-                        .padding(.bottom, 24)
-                }
+            // Exactly one sentence, centered on screen. `.id(pageIndex)` gives
+            // each page its own identity so the old sentence fades OUT and the
+            // new one fades IN — they never overlap or stack.
+            currentPage
+                .id(pageIndex)
+                .transition(.asymmetric(
+                    insertion: .opacity,
+                    removal: .opacity.combined(with: .offset(y: -14))))
+                .padding(.horizontal, 48)
+                .frame(maxWidth: .infinity, maxHeight: .infinity)
+                .animation(.smooth(duration: config.storyPageFadeSeconds), value: pageIndex)
+        }
+        .overlay(alignment: .bottom) {
+            if showContinue {
+                Button(loc.t(.continueGame)) { advance() }
+                    .font(.headline)
+                    .foregroundStyle(.white)
+                    .padding(.horizontal, 28).padding(.vertical, 12)
+                    .background(.ultraThinMaterial, in: Capsule())
+                    .overlay(Capsule().stroke(.white.opacity(0.25)))
+                    .transition(.opacity)
+                    .padding(.bottom, 24)
+                    .animation(.easeInOut(duration: 0.5), value: showContinue)
             }
-            .padding(.horizontal, 48)
-            .animation(.smooth(duration: config.storyPageFadeSeconds), value: pageIndex)
-            .animation(.easeInOut(duration: 0.5), value: showContinue)
         }
         .contentShape(Rectangle())
         .onTapGesture { if showContinue { advance() } }
