@@ -17,6 +17,7 @@ struct HomeView: View {
     @State private var doorOpen = false
     @State private var rushing = false
     @State private var captionPulse = false
+    @State private var showSettings = false
 
     private var loc: Localization { Localization(language: store.settings.language) }
 
@@ -80,6 +81,13 @@ struct HomeView: View {
                     })
             }
         }
+        // Settings popup — floats over the home scene, not a pushed page.
+        .overlay {
+            if showSettings {
+                SettingsView { withAnimation(.easeOut(duration: 0.2)) { showSettings = false } }
+                    .transition(.opacity)
+            }
+        }
     }
 
     // MARK: - Door + glow
@@ -141,7 +149,7 @@ struct HomeView: View {
     }
 
     private var settingsButton: some View {
-        Button { path.append(.settings) } label: {
+        Button { withAnimation(.easeIn(duration: 0.2)) { showSettings = true } } label: {
             Image(systemName: "gearshape.fill")
                 .font(.system(size: 18))
                 .foregroundStyle(.white.opacity(0.6))

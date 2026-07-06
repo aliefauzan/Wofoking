@@ -10,7 +10,6 @@ import SwiftUI
 
 enum Route: Hashable {
     case levelSelect
-    case settings
     case game(Level)
 }
 
@@ -25,8 +24,6 @@ struct RootView: View {
                     switch route {
                     case .levelSelect:
                         LevelSelectView(path: $path)
-                    case .settings:
-                        SettingsView()
                     case .game(let level):
                         GameContainerView(level: level, path: $path)
                     }
