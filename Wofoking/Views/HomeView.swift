@@ -69,7 +69,11 @@ struct HomeView: View {
                 .allowsHitTesting(false)
         }
         .navigationBarBackButtonHidden(true)
-        .onAppear { doorOpen = false; rushing = false }
+        .onAppear {
+            doorOpen = false; rushing = false
+            MenuAudioService.shared.startBackground()
+        }
+        .onDisappear { MenuAudioService.shared.stopBackground() }
         .overlay {
             if showDelete {
                 DeleteConfirmView(
@@ -114,7 +118,11 @@ struct HomeView: View {
 
     private func startGame() {
         guard !doorOpen, !showDelete else { return }
-        // 1. Door swings open (per the prototype recording).
+        // 1. Door swings open (per the prototype recording) — fire the
+        // door-open SFX at the same instant so it tracks the swing, and fade
+        // the menu backsound out as the scene starts to rush in.
+        MenuAudioService.shared.playDoorOpen()
+        MenuAudioService.shared.fadeOutBackground(duration: 1.0)
         withAnimation(.easeInOut(duration: 1.1)) { doorOpen = true }
         Task {
             try? await Task.sleep(for: .milliseconds(1050))
