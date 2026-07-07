@@ -24,11 +24,12 @@ final class PersistenceStore: ObservableObject {
     @Published var settings: AppSettings { didSet { saveSettings() } }
 
     private init() {
-        // Level 1 always unlocked (FR-LVL-1).
+        // Level 2 always unlocked — L1 is retired, play starts straight at
+        // Unstable Loading.
         if let raw = defaults.array(forKey: Key.unlocked) as? [Int], !raw.isEmpty {
             unlockedLevels = Set(raw)
         } else {
-            unlockedLevels = [Level.one.rawValue]
+            unlockedLevels = [Level.two.rawValue]
         }
         if let data = defaults.data(forKey: Key.settings),
            let decoded = try? JSONDecoder().decode(AppSettings.self, from: data) {
@@ -41,7 +42,7 @@ final class PersistenceStore: ObservableObject {
     // MARK: Unlocks
 
     func isUnlocked(_ level: Level) -> Bool {
-        level == .one || unlockedLevels.contains(level.rawValue)
+        level == .two || unlockedLevels.contains(level.rawValue)
     }
 
     func unlock(_ level: Level) {
@@ -50,15 +51,22 @@ final class PersistenceStore: ObservableObject {
         defaults.set(Array(unlockedLevels), forKey: Key.unlocked)
     }
 
-    /// Fake "Delete App" reset → bounce player back to Level 1 (PRD §12.3).
-    func resetToLevelOne() {
-        lastLevel = .one
+    /// Fake "Delete App" reset → bounce the player straight back into the game
+    /// (PRD §12.3; targets L2 now that L1 is retired).
+    func resetForDeletePrank() {
+        lastLevel = .two
     }
 
     // MARK: Last level
 
     var lastLevel: Level {
-        get { Level(rawValue: defaults.integer(forKey: Key.lastLevel)) ?? .one }
+        // Sanitise old installs: a stored L1 (or garbage) maps to the only
+        // playable level.
+        get {
+            guard let stored = Level(rawValue: defaults.integer(forKey: Key.lastLevel)),
+                  stored.isPlayable else { return .two }
+            return stored
+        }
         set { defaults.set(newValue.rawValue, forKey: Key.lastLevel) }
     }
 

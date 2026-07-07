@@ -19,7 +19,15 @@ final class VoiceService {
     static let shared = VoiceService()
     private let synthesizer = AVSpeechSynthesizer()
     private var player: AVAudioPlayer?   // retained — an unretained player goes silent mid-clip
-    private init() {}
+
+    private init() {
+        // Mix politely with other audio; respects the ringer/silent switch
+        // because we don't override the ambient category. Configured ONCE —
+        // re-activating the session on every utterance hitched the main
+        // thread (the same thread as the 30 Hz game tick).
+        try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
 
     /// Muteable from Settings (PRD: voiceMockingEnabled).
     var enabled: Bool = true
@@ -35,11 +43,6 @@ final class VoiceService {
 
     func speak(_ text: String, language: AppLanguage) {
         guard enabled, !text.isEmpty else { return }
-        // Mix politely with other audio; respects the ringer/silent switch
-        // because we don't override the ambient category.
-        try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
-        try? AVAudioSession.sharedInstance().setActive(true)
-
         if let url = clipURL(for: text), playClip(at: url) {
             return
         }

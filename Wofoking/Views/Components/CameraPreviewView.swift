@@ -40,11 +40,18 @@ struct CameraPreviewView: UIViewRepresentable {
 
     func makeCoordinator() -> Coordinator { Coordinator() }
 
+    static func dismantleUIView(_ uiView: ARSCNView, coordinator: Coordinator) {
+        // Leaving gameplay must switch the mesh stream off, or the AR delegate
+        // keeps copying ~1.2k-vertex frames at 60 Hz into a dead subject.
+        coordinator.tracker?.meshEnabled = false
+    }
+
     /// Renders the debug face mesh from `GazeTracker`'s Sendable frame stream
     /// (the tracker owns `session.delegate`, so ARSCNView never sees anchors).
     /// Colours the wireframe by live gaze state as the look-away indicator.
     final class Coordinator: NSObject {
         var showFaceMesh = false
+        private(set) weak var tracker: GazeTracker?
 
         private weak var view: ARSCNView?
         private var faceNode: SCNNode?
@@ -60,6 +67,7 @@ struct CameraPreviewView: UIViewRepresentable {
 
         func attach(_ view: ARSCNView, tracker: GazeTracker) {
             self.view = view
+            self.tracker = tracker
             guard bag.isEmpty else { return }   // subscribe once
             tracker.meshFrame
                 .receive(on: DispatchQueue.main)

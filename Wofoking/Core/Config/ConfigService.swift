@@ -32,7 +32,11 @@ final class ConfigService {
     var lookAwayPitchThresholdDeg: Double = 30
     /// Past this yaw the screen physically can't be seen → accept look-away
     /// regardless of the (noisy at large angles) eye-gaze peek guard.
-    var hardLookAwayYawThresholdDeg: Double = 55
+    /// Must sit BELOW TrueDepth's ~45° face-loss limit or it never fires
+    /// (the old 55° was dead code — faceLost always won the race, Bug D):
+    /// the peek guard then ran in its noisiest band and could false-block
+    /// or fail open on a genuine hard turn.
+    var hardLookAwayYawThresholdDeg: Double = 43
 
     /// Eye-gaze peek guard. Even with the head turned past the away-gate, if
     /// the eyes (ARFaceAnchor.lookAtPoint) are still aimed back at the screen
@@ -47,7 +51,10 @@ final class ConfigService {
     var eyesClosedEnabled = true
     /// Both-eye blink blendShape (0..1, min of left/right) at/above this counts
     /// as eyes shut. Min = the MORE-OPEN eye, so a one-eye peek never registers.
-    var eyeClosedThreshold: Double = 0.65
+    /// Kept high because a squint still sees the screen: lids slitted through
+    /// lashes read ~0.65–0.85 with vision intact, and this path skips the
+    /// eye-gaze peek guard entirely — only a true closure (~0.9+) may pass.
+    var eyeClosedThreshold: Double = 0.85
     /// Eyes-closed is only trusted when the face is at most this far (metres).
     /// Past it the mesh is too low-res → `eyeBlink` drifts high with eyes OPEN
     /// (the "too far reads as eyes shut" bug). Beyond range → never eyesClosed.
@@ -66,6 +73,10 @@ final class ConfigService {
     var calibrationStableSeconds: TimeInterval = 2.5
     /// Continuous look-at-screen time before the Give Up button reveals.
     var giveUpRevealSeconds: TimeInterval = 5.0
+    /// Upper bound on a single engine tick's dt. Without it a main-thread
+    /// hitch (on-device AI taunt inference, thermal stall) lands seconds of
+    /// fill or penalty in the one tick that fires after the stall.
+    var maxTickDeltaSeconds: TimeInterval = 0.2
 
     // MARK: Single-player lock (one face only)
 
@@ -102,6 +113,8 @@ final class ConfigService {
     func rules(for level: Level) -> LevelRules {
         switch level {
         case .one:
+            // Retired: L1 is no longer playable (startLevel guards on
+            // isPlayable). Rules kept for reference only.
             // 0→100% in ~15s of accumulated look-away (PRD FR-L1-3).
             return LevelRules(lives: 3,
                               baseFillPerSecond: 100.0 / 15.0,

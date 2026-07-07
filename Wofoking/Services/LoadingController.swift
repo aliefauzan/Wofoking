@@ -70,9 +70,11 @@ final class LoadingController {
         lastCheckpoint = progress
     }
 
-    /// Snap back after a failed L2 window: random point between checkpoint and 99.
+    /// Snap back after a failed L2 window: random point between the checkpoint
+    /// and CURRENT progress. Capped at the current value — the old random-to-99
+    /// could move the bar UP on a fail, making missing the window profitable.
     func snapBackToCheckpoint() {
-        let upper = max(lastCheckpoint, 99)
+        let upper = max(lastCheckpoint, min(progress, 99))
         progress = Double.random(in: lastCheckpoint...upper).rounded()
     }
 

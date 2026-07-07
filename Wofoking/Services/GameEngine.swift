@@ -29,8 +29,8 @@ final class GameEngine: ObservableObject {
     private let config = ConfigService.shared
     private let persistence = PersistenceStore.shared
 
-    private var level: Level = .one
-    private var rules: LevelRules = ConfigService.shared.rules(for: .one)
+    private var level: Level = .two
+    private var rules: LevelRules = ConfigService.shared.rules(for: .two)
 
     private var timer: Timer?
     private let tick: TimeInterval = 1.0 / 30.0
@@ -39,6 +39,10 @@ final class GameEngine: ObservableObject {
     private var previousGaze: GazeState = .noFace
     private var lookingAtScreenSince: Date?
     private var windowStart: Date?
+    /// Win-window time already spent before a face-loss froze the clock —
+    /// carried across the loss so hiding the face at 100% can't reset the
+    /// 2 s window into an unlimited one.
+    private var windowConsumed: TimeInterval = 0
     private var failCount = 0
     private var lastInviteAt = Date.distantPast
     private var pausedForBackground = false
@@ -69,6 +73,7 @@ final class GameEngine: ObservableObject {
         failCount = 0
         lives = rules.lives ?? Int.max
         windowStart = nil
+        windowConsumed = 0
         lookingAtScreenSince = nil
         canGiveUp = false
         peekCount = 0
@@ -95,6 +100,9 @@ final class GameEngine: ObservableObject {
         stop()
         gaze.pause()
         pausedForBackground = true
+        if state == .reached100, let s = windowStart {
+            windowConsumed = Date().timeIntervalSince(s)   // assign — see step()
+        }
         state = .faceLost
     }
 
@@ -120,7 +128,9 @@ final class GameEngine: ObservableObject {
 
     private func step() {
         let now = Date()
-        let dt = now.timeIntervalSince(lastTickAt)
+        // Clamped: a main-thread hitch (on-device AI taunt inference, thermal
+        // stall) must not land seconds of fill or penalty in a single tick.
+        let dt = min(now.timeIntervalSince(lastTickAt), config.maxTickDeltaSeconds)
         lastTickAt = now
 
         let g = gaze.gaze
@@ -143,6 +153,12 @@ final class GameEngine: ObservableObject {
         // fire haptics, voice, or a bar knock.
         if g == .faceLost {
             if state != .faceLost {
+                // Assign, not accumulate: windowStart is back-dated on every
+                // recovery, so elapsed-since-start IS the total consumed time
+                // (+= would double-count across repeated loss/recovery cycles).
+                if state == .reached100, let s = windowStart {
+                    windowConsumed = Date().timeIntervalSince(s)
+                }
                 state = .faceLost
                 mocking.emit(.inviteLookBack, speak: false, language: language)
             }
@@ -152,8 +168,11 @@ final class GameEngine: ObservableObject {
             // Recovered. If the bar was already full, restore the win window —
             // a face-loss at 100% must not silently void the win — else resume.
             if loader.progress >= 100 {
+                // Resume with only the REMAINING window budget — a fresh
+                // windowStart here made covering the camera at 100% an
+                // infinitely extendable win window.
                 state = .reached100
-                windowStart = Date()
+                windowStart = Date().addingTimeInterval(-windowConsumed)
             } else {
                 state = .lookingAtScreen
             }
@@ -277,6 +296,7 @@ final class GameEngine: ObservableObject {
 
     private func enterWindow() {
         state = .reached100
+        windowConsumed = 0
         windowStart = Date()
         haptics.play(rules.unstable ? .dramatic100 : .medium)
     }

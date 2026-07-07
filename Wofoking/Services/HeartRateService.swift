@@ -43,6 +43,13 @@ final class HeartRateService: NSObject, ObservableObject {
     private var baseline: Double?
     private let elevatedRatio = 1.10   // 10% over resting low = "pressure"
 
+    // Staleness watchdog: the watch can vanish mid-stream (app killed, wrist
+    // off, out of range) with no goodbye message — without a timeout the UI
+    // pulses a dead BPM forever and L2 keeps boosting volatility off it.
+    private var lastSampleAt = Date.distantPast
+    private var staleTimer: Timer?
+    private let sampleStaleSeconds: TimeInterval = 10
+
     private override init() {
         super.init()
         if WCSession.isSupported() {
@@ -70,6 +77,8 @@ final class HeartRateService: NSObject, ObservableObject {
         bpm = nil
         isElevated = false
         baseline = nil
+        staleTimer?.invalidate()
+        staleTimer = nil
         sendCommandToWatch(start: false)
     }
 
@@ -102,6 +111,9 @@ final class HeartRateService: NSObject, ObservableObject {
         config.activityType = .other
         config.locationType = .unknown
         healthStore.startWatchApp(with: config) { _, _ in }
+        // Supersede any still-queued stop context from an earlier disable so a
+        // stale command can't kill the workout this launch just started.
+        sendCommandToWatch(start: true)
         #endif
     }
 
@@ -111,6 +123,8 @@ final class HeartRateService: NSObject, ObservableObject {
         guard enabled, value > 0 else { return }
         bpm = Int(value.rounded())
         isStreaming = true
+        lastSampleAt = Date()
+        startStaleWatchdog()
 
         if let b = baseline {
             let resting = min(b, value)   // track the true resting low, never up
@@ -122,11 +136,35 @@ final class HeartRateService: NSObject, ObservableObject {
         }
     }
 
+    private func startStaleWatchdog() {
+        guard staleTimer == nil else { return }
+        staleTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.checkStale() }
+        }
+    }
+
+    private func checkStale() {
+        guard Date().timeIntervalSince(lastSampleAt) > sampleStaleSeconds else { return }
+        staleTimer?.invalidate()
+        staleTimer = nil
+        bpm = nil
+        isStreaming = false
+        isElevated = false
+    }
+
     private func sendCommandToWatch(start: Bool) {
         guard WCSession.isSupported() else { return }
         let session = WCSession.default
-        guard session.activationState == .activated, session.isReachable else { return }
-        session.sendMessage([HRKey.streaming: start], replyHandler: nil, errorHandler: nil)
+        guard session.activationState == .activated else { return }
+        if session.isReachable {
+            session.sendMessage([HRKey.streaming: start], replyHandler: nil, errorHandler: nil)
+        }
+        // Always queue as application context too: sendMessage is dropped when
+        // the watch is unreachable, which left a running workout orphaned
+        // (battery drain) after a disable. Context survives until the next
+        // connection; the timestamp keeps repeat commands distinct.
+        try? session.updateApplicationContext([HRKey.streaming: start,
+                                               HRKey.timestamp: Date().timeIntervalSince1970])
     }
 }
 

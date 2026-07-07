@@ -80,8 +80,8 @@ struct HomeView: View {
                     onNo: { showDelete = false },
                     onYes: {
                         showDelete = false
-                        store.resetToLevelOne()
-                        path.append(.game(.one))   // joke: bounce to Level 1
+                        store.resetForDeletePrank()
+                        path.append(.game(.two))   // joke: bounce straight back into the game
                     })
             }
         }
@@ -130,7 +130,7 @@ struct HomeView: View {
             withAnimation(.easeIn(duration: 0.6)) { rushing = true }
             try? await Task.sleep(for: .milliseconds(650))
             // 3. Screen is black — swap to the game unseen.
-            path.append(.game(store.lastLevel))
+            path.append(.game(.two))   // L1 retired — play starts straight at L2
         }
     }
 

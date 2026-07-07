@@ -185,4 +185,13 @@ extension WatchHeartRateManager: WCSessionDelegate {
         guard let stream = message[HRKey.streaming] as? Bool else { return }
         Task { @MainActor in stream ? self.start() : self.stop() }
     }
+
+    /// Queued phone commands. sendMessage is dropped while unreachable, so the
+    /// phone mirrors start/stop into application context — without this handler
+    /// a stop issued out of range never arrived and the workout ran forever.
+    nonisolated func session(_ session: WCSession,
+                             didReceiveApplicationContext applicationContext: [String: Any]) {
+        guard let stream = applicationContext[HRKey.streaming] as? Bool else { return }
+        Task { @MainActor in stream ? self.start() : self.stop() }
+    }
 }

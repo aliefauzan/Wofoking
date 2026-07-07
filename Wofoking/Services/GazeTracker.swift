@@ -168,6 +168,7 @@ final class GazeTracker: NSObject, ObservableObject {
         let cfg = ARFaceTrackingConfiguration()
         cfg.maximumNumberOfTrackedFaces = 3   // detect bystanders too
         session.run(cfg, options: [.resetTracking, .removeExistingAnchors])
+        candidateSince = Date()   // fresh session → full debounce before any flip
         #endif
     }
 
@@ -176,6 +177,11 @@ final class GazeTracker: NSObject, ObservableObject {
         session.pause()
         #endif
         commit(.faceLost)
+        // Reset debounce bookkeeping: a candidateSince left over from before
+        // the pause lets the first post-resume frame commit instantly,
+        // skipping the anti-flicker/blink grace.
+        candidate = .faceLost
+        candidateSince = Date()
     }
 
     /// Capture the active player's face as the locked anchor. Returns false if
@@ -185,13 +191,19 @@ final class GazeTracker: NSObject, ObservableObject {
     @discardableResult
     func lockCurrentFace() -> Bool {
         #if canImport(ARKit)
-        let faces = (session.currentFrame?.anchors ?? []).compactMap { $0 as? ARFaceAnchor }
+        // Live anchors only: currentFrame can still carry a stale untracked
+        // ghost whose frozen pose would poison the gaze baseline and leave the
+        // lock pointing at an anchor that never updates again.
+        let faces = (session.currentFrame?.anchors ?? [])
+            .compactMap { $0 as? ARFaceAnchor }
+            .filter { $0.isTracked }
         let samples = faces.map { Self.sample(from: $0) }
-        // On a re-lock (retry) a prior signature exists — prefer the SAME
-        // player over a bystander who may now be more front-facing. First lock
-        // has no signature → fall back to the most front-facing face.
-        let pool = lockedExtent.x > 0 ? samples.filter { signatureMatches($0.extent) } : []
-        let candidates = pool.isEmpty ? samples : pool
+        // On a re-lock (retry) a prior signature exists — ONLY the same player
+        // may rebind, with no fallback to the most front-facing face, or a
+        // bystander who joined mid-game could steal the lock. First lock has
+        // no signature → most front-facing face wins (GameVM already gates the
+        // first lock on exactly one visible face).
+        let candidates = lockedExtent.x > 0 ? samples.filter { signatureMatches($0.extent) } : samples
         guard let best = candidates.min(by: { $0.offAxis < $1.offAxis }),
               best.eyeBlink < config.eyeClosedThreshold else { return false }
         lockedAnchorID = best.id

@@ -25,7 +25,8 @@ final class LevelVM: ObservableObject {
     private let store = PersistenceStore.shared
 
     func refresh() {
-        rows = Level.allCases.map { level in
+        // L1 retired — the select screen offers only L2 and the L3 joke.
+        rows = Level.allCases.filter { $0 != .one }.map { level in
             LevelRow(level: level,
                      unlocked: store.isUnlocked(level),
                      fakePercent: level == .three ? Int.random(in: 1...99) : nil)

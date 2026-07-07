@@ -31,8 +31,9 @@ enum Level: Int, CaseIterable, Identifiable, Codable {
         }
     }
 
-    /// L3 is never actually playable — tapping it only shows a joke.
-    var isPlayable: Bool { self != .three }
+    /// Only L2 is playable: L1 is retired (play starts straight at Unstable
+    /// Loading) and L3 is the meta-joke that never completes.
+    var isPlayable: Bool { self == .two }
 }
 
 /// Tunable per-level behaviour. Values come from `ConfigService` so nothing
