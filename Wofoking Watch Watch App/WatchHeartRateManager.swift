@@ -44,9 +44,15 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
 
     /// `config` is supplied when launched remotely via `startWatchApp` (passed
     /// to the WKApplicationDelegate's `handle(_:)`); nil on manual open.
+    /// Config from the most recent start request. Stashed on the (MainActor)
+    /// instance so the non-Sendable HKWorkoutConfiguration never crosses into
+    /// the @Sendable auth completion (Swift 6 error).
+    private var pendingConfig: HKWorkoutConfiguration?
+
     func start(with config: HKWorkoutConfiguration? = nil) {
         guard !isRunning, !isStarting, HKHealthStore.isHealthDataAvailable() else { return }
         isStarting = true
+        pendingConfig = config
         let hrType = HKQuantityType(.heartRate)
         healthStore.requestAuthorization(toShare: [HKQuantityType.workoutType()],
                                          read: [hrType]) { ok, _ in
@@ -55,7 +61,7 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
             Task { @MainActor [weak self] in
                 guard let self else { return }
                 guard ok else { self.isStarting = false; return }
-                self.beginWorkout(config: config)
+                self.beginWorkout(config: self.pendingConfig)
             }
         }
     }
@@ -85,7 +91,7 @@ final class WatchHeartRateManager: NSObject, ObservableObject {
                 // A failed begin leaves a builder in HK's Error(7) state; if we
                 // kept it, the next start() would build a second one on top of
                 // the wedge. Discard so a fresh session can be built next time.
-                Task { @MainActor in
+                Task { @MainActor [weak self] in
                     guard let self else { return }
                     self.isStarting = false
                     if ok { self.isRunning = true } else { self.teardown() }

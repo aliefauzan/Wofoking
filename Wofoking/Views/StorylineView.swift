@@ -69,9 +69,7 @@ struct StorylineView: View {
     private var currentPage: some View {
         TimelineView(.animation) { tl in
             let blink = Int(tl.date.timeIntervalSinceReferenceDate * 2) % 2 == 0
-            (Text(typed).foregroundColor(.white)
-             + Text(typing && blink ? "▌" : " ")
-                .foregroundColor(.white.opacity(0.8)))
+            Text("\(Text(typed).foregroundColor(.white))\(Text(typing && blink ? "▌" : " ").foregroundColor(.white.opacity(0.8)))")
                 .font(.system(.title2, design: .serif))
                 .multilineTextAlignment(.center)
                 .shadow(color: .black.opacity(0.7), radius: 6)

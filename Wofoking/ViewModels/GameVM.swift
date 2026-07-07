@@ -36,6 +36,10 @@ final class GameVM: ObservableObject {
     /// Live count of visible faces, mirrored from the tracker for the
     /// "too many faces" warning on the Face Scan screen.
     @Published private(set) var faceCount = 0
+    /// Guard readouts mirrored for the debug badge (eye-ray-to-camera angle,
+    /// last identity shape err) — on-device threshold validation/tuning.
+    @Published private(set) var debugConeDeg: Double = 180
+    @Published private(set) var debugShapeErr: Double = 0
 
     let gaze: GazeTracker
     let engine: GameEngine
@@ -43,6 +47,7 @@ final class GameVM: ObservableObject {
 
     private var bag = Set<AnyCancellable>()
     private var calibrationTimer: Timer?
+    private var stableSince: Date?
     private var didBegin = false
 
     init(level: Level) {
@@ -59,6 +64,8 @@ final class GameVM: ObservableObject {
         engine.mocking.$currentLine.assign(to: &$mockLine)
         tracker.$gaze.assign(to: &$gazeState)
         tracker.$visibleFaceCount.assign(to: &$faceCount)
+        tracker.$debugConeDeg.assign(to: &$debugConeDeg)
+        tracker.$debugShapeErr.assign(to: &$debugShapeErr)
     }
 
     // MARK: Flow
@@ -96,24 +103,27 @@ final class GameVM: ObservableObject {
     /// timer so the lock can't fire while a bystander is in frame — the Face
     /// Scan screen shows the "too many faces" block until the frame is clean.
     private func waitForStableFace() {
-        var stableSince: Date?
-        calibrationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] t in
-            Task { @MainActor in
+        stableSince = nil
+        calibrationTimer = Timer.scheduledTimer(withTimeInterval: 0.1, repeats: true) { [weak self] _ in
+            // Re-capture weak self; mutable state lives on the (MainActor)
+            // instance and the timer is invalidated via its property — a
+            // captured local var / non-Sendable Timer are Swift 6 errors.
+            Task { @MainActor [weak self] in
                 guard let self else { return }
                 let g = self.gaze.gaze
                 let single = self.gaze.visibleFaceCount == 1
                 if single && (g == .lookingAtScreen || g == .lookingAway) {
-                    if stableSince == nil { stableSince = Date() }
-                    if let s = stableSince,
+                    if self.stableSince == nil { self.stableSince = Date() }
+                    if let s = self.stableSince,
                        Date().timeIntervalSince(s) >= ConfigService.shared.calibrationStableSeconds,
                        self.gaze.lockCurrentFace() {   // retry next frame if mid-blink
-                        t.invalidate()
+                        self.calibrationTimer?.invalidate()
                         // Stay on the Face Scan screen; the glitch runs off
                         // `faceLocked`, then the view advances to the storyline.
                         self.faceLocked = true
                     }
                 } else {
-                    stableSince = nil
+                    self.stableSince = nil
                 }
             }
         }

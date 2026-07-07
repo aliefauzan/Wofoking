@@ -179,6 +179,12 @@ struct GameContainerView: View {
             Text(label)
                 .font(.caption.monospaced().weight(.semibold))
                 .foregroundStyle(.white)
+            // Live guard numbers: eye-ray-to-camera angle (peek when ≤ the
+            // eyeOnScreenConeDeg gate while turned away) and last identity
+            // shape err (imposter when > faceShapeToleranceRatio).
+            Text(String(format: "eye %.0f° · id %.3f", vm.debugConeDeg, vm.debugShapeErr))
+                .font(.caption2.monospaced())
+                .foregroundStyle(.white.opacity(0.7))
         }
         .padding(.horizontal, 12).padding(.vertical, 6)
         .background(.ultraThinMaterial, in: Capsule())

@@ -139,7 +139,7 @@ final class HeartRateService: NSObject, ObservableObject {
     private func startStaleWatchdog() {
         guard staleTimer == nil else { return }
         staleTimer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.checkStale() }
+            Task { @MainActor [weak self] in self?.checkStale() }
         }
     }
 

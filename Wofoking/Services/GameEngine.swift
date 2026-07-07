@@ -120,7 +120,9 @@ final class GameEngine: ObservableObject {
         timer?.invalidate()
         lastTickAt = Date()
         timer = Timer.scheduledTimer(withTimeInterval: tick, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.step() }
+            // Re-capture weak self in the Task: referencing the outer (mutable
+            // weak) capture inside concurrent code is a Swift 6 error.
+            Task { @MainActor [weak self] in self?.step() }
         }
     }
 

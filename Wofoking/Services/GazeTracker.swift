@@ -44,6 +44,23 @@ struct FaceSample: Sendable {
     /// space ≈ the player's physical face dimensions. Lightweight identity
     /// signature used to keep the lock on ONE person and reject bystanders.
     let extent: SIMD3<Double>
+    /// Scale-normalised per-vertex distance-from-centroid profile of the face
+    /// mesh (ARKit's topology is canonical, so index i is the same anatomical
+    /// point on every face). Discriminates PEOPLE where the bounding box can't
+    /// — nearly all adults share extent within ~8%, but not this profile.
+    let shape: [Double]
+    /// Angle (deg) between the eyes' gaze ray and the ray from the face to
+    /// the front camera. Small = eyes aimed at the phone regardless of head
+    /// pose — the pose-independent peek test. 180 when camera unknown.
+    let gazeOnCameraDeg: Double
+    /// Head-pose-vs-camera angles (deg): where the CAMERA sits in the face's
+    /// own frame (azimuth = left/right off face-forward, elevation = up/down).
+    /// ≈ 0 when facing the phone. Drift-immune — world-frame yaw shifts when
+    /// the phone moves or VIO re-origins (caused the "turn right undetected /
+    /// turn left inverted" field bug); these depend only on relative geometry,
+    /// and the face frame keeps yaw/pitch anatomically separated in landscape.
+    let camAzimuthDeg: Double
+    let camElevationDeg: Double
     var offAxis: Double { abs(yaw) + abs(pitch) }
     /// Where the player is actually looking = head pose + eye offset.
     var gazeYaw: Double { yaw + eyeYaw }
@@ -75,6 +92,11 @@ final class GazeTracker: NSObject, ObservableObject {
     /// 3 faces (see `start()`), so this is a free read used only by the
     /// face-scan UI to warn "too many faces" — it never gates gameplay.
     @Published private(set) var visibleFaceCount = 0
+    /// Live guard readouts for the on-screen debug badge, so the peek/swap
+    /// thresholds can be validated and tuned on device without Xcode attached.
+    /// Only updated while the debug overlay is on (`meshEnabled`).
+    @Published private(set) var debugConeDeg: Double = 180
+    @Published private(set) var debugShapeErr: Double = 0
     /// True only on hardware that supports ARKit face tracking.
     let isSupported: Bool
 
@@ -98,10 +120,12 @@ final class GazeTracker: NSObject, ObservableObject {
     private var lockedAnchorID: UUID?
     private var lastSeenLocked = Date()
 
-    // Geometry signature (face w/h/d, metres) of the locked player, captured at
-    // lock. Used to re-acquire the SAME person after ARKit hands back a new
-    // anchor UUID, and to reject bystanders — the lock stays on one person.
+    // Identity signature of the locked player, captured at lock: face size
+    // (w/h/d, metres) PLUS the canonical-mesh shape profile. Used to
+    // re-acquire the SAME person after ARKit hands back a new anchor UUID and
+    // to reject anyone else — a substitute player must never inherit the lock.
     private var lockedExtent = SIMD3<Double>(repeating: 0)
+    private var lockedShape: [Double] = []
 
     // Frozen-mesh detection: last locked pose + when it first stopped moving.
     // NaN seed → the first frame can't read as frozen.
@@ -110,15 +134,16 @@ final class GazeTracker: NSObject, ObservableObject {
     private var lastLockedDistance = Double.nan
     private var lockedFrozenSince: Date?
 
-    // Calibrated neutral pose captured at lock. Gaze is judged relative to
-    // this baseline, not absolute world axes — so the player's natural
-    // holding angle / landscape orientation doesn't read as "looking away".
-    private var baseYaw = 0.0
-    private var basePitch = 0.0
-    // Neutral combined gaze (head+eye) at lock — the peek guard's "on screen"
-    // reference, so a tilted/landscape hold doesn't bias eye-gaze either.
-    private var baseGazeYaw = 0.0
-    private var baseGazePitch = 0.0
+    // Calibrated neutral captured at lock, in face→camera terms (azimuth /
+    // elevation of the camera in the face's frame). Judging deltas against
+    // this baseline absorbs the player's natural holding angle, and the
+    // face→camera formulation is immune to ARKit world-frame drift — world
+    // yaw shifts whenever the phone moves or VIO re-origins, which made a
+    // right turn read smaller and a left turn read past the hard gate.
+    // (The peek guard needs no baseline: it tests the eye ray against the
+    // camera position directly, pose-independent.)
+    private var baseAzimuth = 0.0
+    private var baseElevation = 0.0
 
     // Debounce bookkeeping.
     private var candidate: GazeState = .noFace
@@ -153,7 +178,7 @@ final class GazeTracker: NSObject, ObservableObject {
         case .denied, .restricted: permission = .denied
         case .notDetermined:
             AVCaptureDevice.requestAccess(for: .video) { [weak self] granted in
-                Task { @MainActor in self?.permission = granted ? .granted : .denied }
+                Task { @MainActor [weak self] in self?.permission = granted ? .granted : .denied }
             }
         @unknown default: permission = .denied
         }
@@ -194,25 +219,25 @@ final class GazeTracker: NSObject, ObservableObject {
         // Live anchors only: currentFrame can still carry a stale untracked
         // ghost whose frozen pose would poison the gaze baseline and leave the
         // lock pointing at an anchor that never updates again.
+        let camera = session.currentFrame?.camera.transform
         let faces = (session.currentFrame?.anchors ?? [])
             .compactMap { $0 as? ARFaceAnchor }
             .filter { $0.isTracked }
-        let samples = faces.map { Self.sample(from: $0) }
+        let samples = faces.map { Self.sample(from: $0, camera: camera) }
         // On a re-lock (retry) a prior signature exists — ONLY the same player
         // may rebind, with no fallback to the most front-facing face, or a
         // bystander who joined mid-game could steal the lock. First lock has
         // no signature → most front-facing face wins (GameVM already gates the
         // first lock on exactly one visible face).
-        let candidates = lockedExtent.x > 0 ? samples.filter { signatureMatches($0.extent) } : samples
+        let candidates = lockedExtent.x > 0 ? samples.filter { isLockedPlayer($0) } : samples
         guard let best = candidates.min(by: { $0.offAxis < $1.offAxis }),
               best.eyeBlink < config.eyeClosedThreshold else { return false }
         lockedAnchorID = best.id
         meshAnchorID = best.id      // overlay tracks the locked player
         lockedExtent = best.extent  // identity fingerprint for re-acquisition
-        baseYaw = best.yaw          // neutral = where player looks now
-        basePitch = best.pitch
-        baseGazeYaw = best.gazeYaw
-        baseGazePitch = best.gazePitch
+        lockedShape = best.shape
+        baseAzimuth = best.camAzimuthDeg      // neutral = where player looks now
+        baseElevation = best.camElevationDeg
         lastSeenLocked = Date()
         lastLockedYaw = best.yaw
         lastLockedPitch = best.pitch
@@ -235,6 +260,7 @@ final class GazeTracker: NSObject, ObservableObject {
         lockedAnchorID = nil
         meshAnchorID = nil
         lockedExtent = SIMD3<Double>(repeating: 0)
+        lockedShape = []
         lockedFrozenSince = nil
         isCalibrated = false
     }
@@ -258,15 +284,24 @@ final class GazeTracker: NSObject, ObservableObject {
 
     #if canImport(ARKit)
     /// Pure, off-actor-safe conversion of a face anchor to a Sendable sample.
-    nonisolated static func sample(from anchor: ARFaceAnchor) -> FaceSample {
+    /// `camera` = the frame's camera transform, needed for the camera-cone
+    /// peek test; nil (no frame) makes the test fail open.
+    nonisolated static func sample(from anchor: ARFaceAnchor,
+                                   camera: simd_float4x4?) -> FaceSample {
         let (yaw, pitch) = yawPitch(anchor.transform)
         let (eyeYaw, eyePitch) = eyeAngles(anchor.lookAtPoint)
         let t = anchor.transform.columns.3
         let distance = Double(simd_length(SIMD3<Float>(t.x, t.y, t.z)))
+        let (az, el) = faceToCameraAngles(faceTransform: anchor.transform, camera: camera)
         return FaceSample(id: anchor.identifier, tracked: anchor.isTracked,
                           yaw: yaw, pitch: pitch, eyeYaw: eyeYaw, eyePitch: eyePitch,
                           eyeBlink: blinkAmount(anchor), frustration: frustrationScore(anchor),
-                          distanceM: distance, extent: faceExtent(anchor.geometry))
+                          distanceM: distance, extent: faceExtent(anchor.geometry),
+                          shape: shapeSignature(anchor.geometry.vertices),
+                          gazeOnCameraDeg: gazeToCameraDeg(faceTransform: anchor.transform,
+                                                           lookAtPoint: anchor.lookAtPoint,
+                                                           camera: camera),
+                          camAzimuthDeg: az, camElevationDeg: el)
     }
 
     /// Bounding-box size (w,h,d, metres) of the face mesh in anchor-local
@@ -320,15 +355,111 @@ final class GazeTracker: NSObject, ObservableObject {
         return (yaw, pitch)
     }
 
-    /// Same-player test: face WIDTH and DEPTH within tolerance of the locked
-    /// signature. Height (y) is skipped — it stretches when the mouth opens, so
-    /// it's expression, not identity. False until a lock signature exists.
+    // The two guard primitives below are pure simd math kept OUTSIDE the
+    // ARKit guard (like yawPitch) so they compile — and can be numerically
+    // validated — on platforms without ARKit.
+
+    /// Angle (deg) between the gaze ray (face origin → lookAtPoint, world
+    /// space) and the ray from the face to the camera. The camera IS the
+    /// phone, so a small angle means the eyes are aimed at the screen no
+    /// matter how the head is turned — catches head-up/eyes-down and
+    /// large-yaw side-eye peeks the baseline-relative sum missed.
+    nonisolated static func gazeToCameraDeg(faceTransform: simd_float4x4,
+                                            lookAtPoint: simd_float3,
+                                            camera: simd_float4x4?) -> Double {
+        guard let camera else { return 180 }
+        let f = faceTransform.columns.3
+        let facePos = SIMD3<Float>(f.x, f.y, f.z)
+        let l4 = faceTransform * SIMD4<Float>(lookAtPoint.x, lookAtPoint.y, lookAtPoint.z, 1)
+        let gazeDir = SIMD3<Float>(l4.x, l4.y, l4.z) - facePos
+        let c = camera.columns.3
+        let toCam = SIMD3<Float>(c.x, c.y, c.z) - facePos
+        let gLen = simd_length(gazeDir), cLen = simd_length(toCam)
+        guard gLen > 1e-4, cLen > 1e-4 else { return 180 }
+        let cosang = simd_dot(gazeDir / gLen, toCam / cLen)
+        return acos(Double(max(-1, min(1, cosang)))) * 180 / .pi
+    }
+
+    /// Where the camera sits in the face's own frame, as (azimuth, elevation)
+    /// in degrees off face-forward (+z). Facing the phone → (≈0, ≈0); head
+    /// yaw moves azimuth, head pitch moves elevation, in ANY device
+    /// orientation and immune to ARKit world drift (pure relative geometry).
+    /// (0, 0) when the camera transform is unavailable — fail-safe: reads as
+    /// facing, so the bar pauses rather than advancing on missing data.
+    nonisolated static func faceToCameraAngles(faceTransform: simd_float4x4,
+                                               camera: simd_float4x4?) -> (Double, Double) {
+        guard let camera else { return (0, 0) }
+        let f = faceTransform.columns.3
+        let facePos = SIMD3<Float>(f.x, f.y, f.z)
+        let c = camera.columns.3
+        let toCam = SIMD3<Float>(c.x, c.y, c.z) - facePos
+        guard simd_length(toCam) > 1e-4 else { return (0, 0) }
+        let rot = simd_float3x3(columns: (
+            SIMD3<Float>(faceTransform.columns.0.x, faceTransform.columns.0.y, faceTransform.columns.0.z),
+            SIMD3<Float>(faceTransform.columns.1.x, faceTransform.columns.1.y, faceTransform.columns.1.z),
+            SIMD3<Float>(faceTransform.columns.2.x, faceTransform.columns.2.y, faceTransform.columns.2.z)))
+        // Orthonormal rotation → transpose = inverse: world → face coords.
+        let d = simd_normalize(rot.transpose * toCam)
+        let az = atan2(Double(d.x), Double(d.z)) * 180 / .pi
+        let el = atan2(Double(d.y), Double(sqrt(Double(d.x * d.x + d.z * d.z)))) * 180 / .pi
+        return (az, el)
+    }
+
+    /// Scale-free shape profile: distance from mesh centroid at a fixed
+    /// stride over the canonical vertex list, normalised by the mean. Same
+    /// person ≈ same profile across distance and (mostly) expression; a
+    /// different face diverges. One pass + ~24 samples — negligible at 30 Hz.
+    nonisolated static func shapeSignature(_ verts: [SIMD3<Float>]) -> [Double] {
+        guard verts.count > 32 else { return [] }
+        var centroid = SIMD3<Float>(repeating: 0)
+        for v in verts { centroid += v }
+        centroid /= Float(verts.count)
+        let step = max(1, verts.count / 24)
+        var dists: [Double] = []
+        var i = 0
+        while i < verts.count {
+            dists.append(Double(simd_length(verts[i] - centroid)))
+            i += step
+        }
+        let mean = dists.reduce(0, +) / Double(dists.count)
+        guard mean > 0 else { return [] }
+        return dists.map { $0 / mean }
+    }
+
+    /// Same-player test, TWO independent gates so a substitute can't inherit
+    /// the lock: (1) face WIDTH and DEPTH within tolerance of the locked
+    /// signature — height (y) is skipped, it stretches when the mouth opens —
+    /// and (2) the canonical-mesh shape profile within tolerance. Size alone
+    /// accepted nearly any adult; the shape profile is the discriminator.
+    /// False until a lock signature exists.
+    private func isLockedPlayer(_ s: FaceSample) -> Bool {
+        signatureMatches(s.extent) && shapeMatches(s.shape)
+    }
+
     private func signatureMatches(_ a: SIMD3<Double>) -> Bool {
         let b = lockedExtent
         guard b.x > 0, b.z > 0, a.x > 0, a.z > 0 else { return false }
         let dw = abs(a.x - b.x) / max(a.x, b.x)
         let dd = abs(a.z - b.z) / max(a.z, b.z)
         return dw <= config.faceMatchToleranceRatio && dd <= config.faceMatchToleranceRatio
+    }
+
+    private func shapeMatches(_ a: [Double]) -> Bool {
+        let b = lockedShape
+        guard !a.isEmpty, a.count == b.count else { return false }
+        var err = 0.0
+        for i in a.indices { err += abs(a[i] - b[i]) / max(a[i], b[i]) }
+        err /= Double(a.count)
+        if meshEnabled {
+            let rounded = (err * 1000).rounded() / 1000
+            if rounded != debugShapeErr { debugShapeErr = rounded }
+        }
+        #if DEBUG
+        if err > config.faceShapeToleranceRatio {
+            print("[GazeTracker] shape reject: err \(String(format: "%.3f", err)) > \(config.faceShapeToleranceRatio)")
+        }
+        #endif
+        return err <= config.faceShapeToleranceRatio
     }
 
     /// Apply tracked samples and update the (debounced) gaze state.
@@ -350,9 +481,23 @@ final class GazeTracker: NSObject, ObservableObject {
         // no locked anchor → face-lost grace, never a bare .noFace (the locked
         // player leaving the frame must read .faceLost, not "no face").
         var locked = samples.first(where: { $0.id == id && $0.tracked })
+        // Continuous identity check on the UUID-followed sample, near-frontal
+        // frames only (profile geometry degrades the shape fit): ARKit can
+        // re-fit a SURVIVING anchor onto a new face during a quick player
+        // swap, so trusting the UUID alone lets a substitute inherit the
+        // lock. A frontal face that stops matching the locked signature is
+        // treated as "locked player absent" — the rebind/face-lost path takes
+        // over and only the real player can resume. A transient expression
+        // spike recovers on the next matching frame.
+        if config.faceMatchEnabled, lockedExtent.x > 0, let l = locked,
+           abs(l.camAzimuthDeg - baseAzimuth) < config.lookAwayYawThresholdDeg,
+           abs(l.camElevationDeg - baseElevation) < config.lookAwayPitchThresholdDeg,
+           !isLockedPlayer(l) {
+            locked = nil
+        }
         if locked == nil, config.faceMatchEnabled {
             locked = samples
-                .filter { $0.tracked && signatureMatches($0.extent) }
+                .filter { $0.tracked && isLockedPlayer($0) }
                 .min(by: { $0.offAxis < $1.offAxis })
             if let rebound = locked { lockedAnchorID = rebound.id; meshAnchorID = rebound.id }   // rebind same person
         }
@@ -386,8 +531,10 @@ final class GazeTracker: NSObject, ObservableObject {
             return
         }
 
-        let yawDelta = abs(locked.yaw - baseYaw)
-        let pitchDelta = abs(locked.pitch - basePitch)
+        // Face→camera deltas, not world-frame yaw/pitch: world axes drift with
+        // phone motion / VIO re-origin and inverted the classification.
+        let yawDelta = abs(locked.camAzimuthDeg - baseAzimuth)
+        let pitchDelta = abs(locked.camElevationDeg - baseElevation)
         lastYawDelta = yawDelta
 
         // Head turned off the calibrated neutral — to the side (yaw) or down
@@ -396,20 +543,25 @@ final class GazeTracker: NSObject, ObservableObject {
         let turnedAway = yawDelta >= config.lookAwayYawThresholdDeg
                       || pitchDelta >= config.lookAwayPitchThresholdDeg
 
-        // Past the hard angle the screen can't be seen at all → always away,
-        // skip the peek guard (lookAtPoint gets noisy near profile and would
-        // otherwise false-block a real turn — the "already away, no detect" bug).
+        // Past the hard angle the screen can't be seen even with maximal eye
+        // counter-rotation → always away, skip the peek guard.
         let hardAway = yawDelta >= config.hardLookAwayYawThresholdDeg
 
-        // Peek guard (moderate turns only): head turned but eyes slid back to
-        // the screen. Combined gaze (head+eye) near neutral baseline = peeking.
+        // Peek guard: head turned away but the eye-gaze ray points back at
+        // the camera (= the phone). Pose-independent, so it catches the
+        // head-up/eyes-down and large-yaw side-eye peeks that the old
+        // baseline-relative head+eye sum missed.
         let peeking = config.peekGuardEnabled && turnedAway && !hardAway
-            && abs(locked.gazeYaw - baseGazeYaw) <= config.eyeOnScreenToleranceDeg
-            && abs(locked.gazePitch - baseGazePitch) <= config.eyeOnScreenToleranceDeg
+            && locked.gazeOnCameraDeg <= config.eyeOnScreenConeDeg
 
         // Count each caught peek on its rising edge (cheat detected).
         if peeking && !wasPeeking { peekCount += 1 }
         wasPeeking = peeking
+
+        if meshEnabled {
+            let cone = locked.gazeOnCameraDeg.rounded()
+            if cone != debugConeDeg { debugConeDeg = cone }
+        }
 
         updateFrustration(locked.frustration)
 
@@ -469,7 +621,8 @@ final class GazeTracker: NSObject, ObservableObject {
 extension GazeTracker: ARSessionDelegate {
     nonisolated func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
         let faceAnchors = anchors.compactMap { $0 as? ARFaceAnchor }
-        let samples = faceAnchors.map(GazeTracker.sample)
+        let camera = session.currentFrame?.camera.transform
+        let samples = faceAnchors.map { GazeTracker.sample(from: $0, camera: camera) }
 
         // Debug overlay: snapshot the LOCKED player's mesh as Sendable value
         // data. Pick by locked id — not `.first`, which can be a bystander/ghost

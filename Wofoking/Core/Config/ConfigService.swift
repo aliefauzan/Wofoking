@@ -30,22 +30,24 @@ final class ConfigService {
     var lookAwayYawThresholdDeg: Double = 40
     /// Up/down equivalent of the yaw away-gate (looking down also = no peek).
     var lookAwayPitchThresholdDeg: Double = 30
-    /// Past this yaw the screen physically can't be seen → accept look-away
-    /// regardless of the (noisy at large angles) eye-gaze peek guard.
-    /// Must sit BELOW TrueDepth's ~45° face-loss limit or it never fires
-    /// (the old 55° was dead code — faceLost always won the race, Bug D):
-    /// the peek guard then ran in its noisiest band and could false-block
-    /// or fail open on a genuine hard turn.
-    var hardLookAwayYawThresholdDeg: Double = 43
+    /// Past this yaw the screen physically can't be seen even with maximal
+    /// eye counter-rotation (~45°), so the peek guard is bypassed. Field
+    /// screenshots show modern TrueDepth still tracking face + eyes well past
+    /// 43°, and the camera-cone guard stays reliable at angle — so the bypass
+    /// starts only where peeking is anatomically impossible.
+    var hardLookAwayYawThresholdDeg: Double = 60
 
     /// Eye-gaze peek guard. Even with the head turned past the away-gate, if
     /// the eyes (ARFaceAnchor.lookAtPoint) are still aimed back at the screen
     /// the player is peeking → treated as looking AT the screen, no progress.
     var peekGuardEnabled = true
-    /// Combined head+eye gaze within this many deg of the calibrated baseline
-    /// is judged "eyes on screen" (peeking). Fails open: if device eye-gaze
-    /// sign differs, the guard simply won't fire and the game stays playable.
-    var eyeOnScreenToleranceDeg: Double = 22
+    /// Peek = the eye-gaze ray points within this many deg of the ray from
+    /// the face to the front camera (≈ the phone screen). Pose-INDEPENDENT —
+    /// the old baseline-relative head+eye sum missed head-up/eyes-down and
+    /// large-yaw side-eye peeks because eye counter-rotation under-measures
+    /// in exactly those poses. Screen subtends ~±10° at 40 cm; slack covers
+    /// lookAtPoint error. Fails open (180°) when no camera transform.
+    var eyeOnScreenConeDeg: Double = 18
     /// Eyes-closed gating. Closing BOTH eyes advances the bar (alt to looking
     /// away). Blind = can't peek, so this path needs no eye-gaze guard.
     var eyesClosedEnabled = true
@@ -88,10 +90,20 @@ final class ConfigService {
     /// separates the seated player from bystanders, not a security-grade match.
     var faceMatchEnabled = true
     /// Max relative difference (0…1) in face WIDTH and DEPTH for a present face
-    /// to count as the SAME locked player. Looser → re-acquires through more
-    /// expression/distance change but risks matching a similar-sized bystander;
-    /// tighter → stricter identity but may fail to re-lock the real player.
-    var faceMatchToleranceRatio: Double = 0.15
+    /// to count as the SAME locked player. The old 0.15 accepted nearly any
+    /// adult (face-width spread between people is only ~±8%), which let a
+    /// substitute player take over mid-game. Size is now one of TWO gates —
+    /// the mesh shape vector below is the discriminating one.
+    var faceMatchToleranceRatio: Double = 0.08
+    /// Max mean relative difference (0…1) between the locked player's mesh
+    /// shape vector and a candidate face's (per-vertex distance-from-centroid
+    /// profile on ARKit's canonical topology, scale-normalised). Same person
+    /// across expressions stays low; a different face's profile differs.
+    /// Looser → survives more expression change but weakens the imposter gate.
+    /// Set from on-device badge readings: same player measured err 0.016–0.022
+    /// (even mid-turn), an imposter measured 0.036 and slipped through the old
+    /// 0.05 — 0.03 sits between the two observed bands.
+    var faceShapeToleranceRatio: Double = 0.03
 
     // MARK: Frozen-mesh guard
 
