@@ -27,7 +27,7 @@ final class ConfigService {
     /// reliable tracking range (~45°) — beyond that the face half-occludes and
     /// reports faceLost instead of lookingAway, so a genuine turn never reads.
     /// No-peek is enforced by the eye-gaze guard below, not by a huge angle.
-    var lookAwayYawThresholdDeg: Double = 40
+    var lookAwayYawThresholdDeg: Double = 50
     /// Up/down equivalent of the yaw away-gate (looking down also = no peek).
     var lookAwayPitchThresholdDeg: Double = 30
     /// Past this yaw the screen physically can't be seen even with maximal
@@ -111,7 +111,7 @@ final class ConfigService {
     /// these angles). Only true near-profile beyond this is skipped, where
     /// ARKit's mesh fit is genuinely noisy.
     var identityVerifyMaxYawDeg: Double = 55
-    var identityVerifyMaxPitchDeg: Double = 45
+    var identityVerifyMaxPitchDeg: Double = 55
     /// A sustained identity mismatch must persist this long before the lock is
     /// dropped — absorbs a transient bad frame / expression spike without
     /// letting a real substitute keep the lock.
