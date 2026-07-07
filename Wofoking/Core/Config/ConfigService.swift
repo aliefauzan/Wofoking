@@ -104,6 +104,18 @@ final class ConfigService {
     /// (even mid-turn), an imposter measured 0.036 and slipped through the old
     /// 0.05 — 0.03 sits between the two observed bands.
     var faceShapeToleranceRatio: Double = 0.03
+    /// Continuous identity check runs whenever the head is within this yaw/
+    /// pitch off the calibrated neutral (deg). Set high — past the look-away
+    /// gate — so a substitute can't dodge the check by playing turned-away
+    /// (anchor-local shape is pose-independent, so verification is valid at
+    /// these angles). Only true near-profile beyond this is skipped, where
+    /// ARKit's mesh fit is genuinely noisy.
+    var identityVerifyMaxYawDeg: Double = 55
+    var identityVerifyMaxPitchDeg: Double = 45
+    /// A sustained identity mismatch must persist this long before the lock is
+    /// dropped — absorbs a transient bad frame / expression spike without
+    /// letting a real substitute keep the lock.
+    var identityGraceSeconds: TimeInterval = 0.4
 
     // MARK: Frozen-mesh guard
 

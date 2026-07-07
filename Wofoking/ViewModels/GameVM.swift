@@ -40,6 +40,7 @@ final class GameVM: ObservableObject {
     /// last identity shape err) — on-device threshold validation/tuning.
     @Published private(set) var debugConeDeg: Double = 180
     @Published private(set) var debugShapeErr: Double = 0
+    @Published private(set) var debugYawDeg: Double = 0
 
     let gaze: GazeTracker
     let engine: GameEngine
@@ -66,6 +67,7 @@ final class GameVM: ObservableObject {
         tracker.$visibleFaceCount.assign(to: &$faceCount)
         tracker.$debugConeDeg.assign(to: &$debugConeDeg)
         tracker.$debugShapeErr.assign(to: &$debugShapeErr)
+        tracker.$debugYawDeg.assign(to: &$debugYawDeg)
     }
 
     // MARK: Flow

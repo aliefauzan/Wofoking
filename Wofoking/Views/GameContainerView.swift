@@ -182,7 +182,7 @@ struct GameContainerView: View {
             // Live guard numbers: eye-ray-to-camera angle (peek when ≤ the
             // eyeOnScreenConeDeg gate while turned away) and last identity
             // shape err (imposter when > faceShapeToleranceRatio).
-            Text(String(format: "eye %.0f° · id %.3f", vm.debugConeDeg, vm.debugShapeErr))
+            Text(String(format: "yaw %+.0f° · eye %.0f° · id %.3f", vm.debugYawDeg, vm.debugConeDeg, vm.debugShapeErr))
                 .font(.caption2.monospaced())
                 .foregroundStyle(.white.opacity(0.7))
         }

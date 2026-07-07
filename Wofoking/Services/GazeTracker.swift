@@ -97,6 +97,11 @@ final class GazeTracker: NSObject, ObservableObject {
     /// Only updated while the debug overlay is on (`meshEnabled`).
     @Published private(set) var debugConeDeg: Double = 180
     @Published private(set) var debugShapeErr: Double = 0
+    /// Signed head yaw off the calibrated neutral (deg), face→camera azimuth.
+    /// Signed so a single left-turn + right-turn screenshot pair proves the
+    /// classification is symmetric (the reported "turn right undetected / turn
+    /// left peek" asymmetry shows here as unequal magnitudes). Debug-only.
+    @Published private(set) var debugYawDeg: Double = 0
     /// True only on hardware that supports ARKit face tracking.
     let isSupported: Bool
 
@@ -126,6 +131,10 @@ final class GazeTracker: NSObject, ObservableObject {
     // to reject anyone else — a substitute player must never inherit the lock.
     private var lockedExtent = SIMD3<Double>(repeating: 0)
     private var lockedShape: [Double] = []
+    // When the UUID-followed anchor first stopped matching the locked identity.
+    // A short grace before dropping the lock absorbs a transient bad frame; a
+    // sustained mismatch (a substitute player) drops through to face-lost.
+    private var identityLostSince: Date?
 
     // Frozen-mesh detection: last locked pose + when it first stopped moving.
     // NaN seed → the first frame can't read as frozen.
@@ -236,6 +245,7 @@ final class GazeTracker: NSObject, ObservableObject {
         meshAnchorID = best.id      // overlay tracks the locked player
         lockedExtent = best.extent  // identity fingerprint for re-acquisition
         lockedShape = best.shape
+        identityLostSince = nil
         baseAzimuth = best.camAzimuthDeg      // neutral = where player looks now
         baseElevation = best.camElevationDeg
         lastSeenLocked = Date()
@@ -261,6 +271,7 @@ final class GazeTracker: NSObject, ObservableObject {
         meshAnchorID = nil
         lockedExtent = SIMD3<Double>(repeating: 0)
         lockedShape = []
+        identityLostSince = nil
         lockedFrozenSince = nil
         isCalibrated = false
     }
@@ -481,19 +492,39 @@ final class GazeTracker: NSObject, ObservableObject {
         // no locked anchor → face-lost grace, never a bare .noFace (the locked
         // player leaving the frame must read .faceLost, not "no face").
         var locked = samples.first(where: { $0.id == id && $0.tracked })
-        // Continuous identity check on the UUID-followed sample, near-frontal
-        // frames only (profile geometry degrades the shape fit): ARKit can
-        // re-fit a SURVIVING anchor onto a new face during a quick player
-        // swap, so trusting the UUID alone lets a substitute inherit the
-        // lock. A frontal face that stops matching the locked signature is
-        // treated as "locked player absent" — the rebind/face-lost path takes
-        // over and only the real player can resume. A transient expression
-        // spike recovers on the next matching frame.
-        if config.faceMatchEnabled, lockedExtent.x > 0, let l = locked,
-           abs(l.camAzimuthDeg - baseAzimuth) < config.lookAwayYawThresholdDeg,
-           abs(l.camElevationDeg - baseElevation) < config.lookAwayPitchThresholdDeg,
-           !isLockedPlayer(l) {
-            locked = nil
+        // Continuous identity check on the UUID-followed sample. ARKit can
+        // re-fit a SURVIVING anchor onto a new face during a player swap, so
+        // trusting the UUID alone lets a substitute inherit the lock.
+        //
+        // Runs at ALL head angles the mesh is still reliable at — NOT just
+        // frontal. The shape signature is read from anchor-LOCAL vertices, so
+        // head pose barely changes it (rotation lives in the transform, not
+        // the local mesh); an imposter therefore can't dodge the check by
+        // playing turned-away. The old frontal-only gate did exactly that: a
+        // substitute advanced the bar while looking away (verification
+        // skipped) and was only rejected once they faced the screen — the
+        // "detects true forever, then does the opposite" bug. Only true
+        // near-profile is skipped, where ARKit's fit is genuinely noisy. A
+        // short grace absorbs a transient bad frame; a sustained mismatch
+        // drops the lock so the rebind / face-lost path (only the real player
+        // re-matches) takes over.
+        if config.faceMatchEnabled, lockedExtent.x > 0, let l = locked {
+            let verifiable = abs(l.camAzimuthDeg - baseAzimuth) < config.identityVerifyMaxYawDeg
+                          && abs(l.camElevationDeg - baseElevation) < config.identityVerifyMaxPitchDeg
+            if verifiable {
+                if isLockedPlayer(l) {
+                    identityLostSince = nil                     // confirmed real player
+                } else {
+                    if identityLostSince == nil { identityLostSince = Date() }
+                    if let s = identityLostSince,
+                       Date().timeIntervalSince(s) >= config.identityGraceSeconds {
+                        locked = nil                            // sustained imposter
+                    }
+                }
+            }
+            // Not verifiable (near profile): hold the current lock and leave
+            // the grace clock running — an imposter can't stay at exact
+            // profile indefinitely without a verifiable frame.
         }
         if locked == nil, config.faceMatchEnabled {
             locked = samples
@@ -561,6 +592,8 @@ final class GazeTracker: NSObject, ObservableObject {
         if meshEnabled {
             let cone = locked.gazeOnCameraDeg.rounded()
             if cone != debugConeDeg { debugConeDeg = cone }
+            let signedYaw = (locked.camAzimuthDeg - baseAzimuth).rounded()
+            if signedYaw != debugYawDeg { debugYawDeg = signedYaw }
         }
 
         updateFrustration(locked.frustration)
