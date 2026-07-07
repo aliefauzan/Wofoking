@@ -88,6 +88,10 @@ final class GazeTracker: NSObject, ObservableObject {
     @Published private(set) var peekCount = 0
     /// True while the player holds a frustrated scowl (browDown + frown/press).
     @Published private(set) var isFrustrated = false
+    /// True while a DIFFERENT face (not the locked player) is the only one
+    /// present after lock — drives the "wajah berbeda / different face" warning.
+    /// Cleared the moment the real locked player is re-acquired.
+    @Published private(set) var identityRejected = false
     /// Number of tracked faces currently visible. Session already tracks up to
     /// 3 faces (see `start()`), so this is a free read used only by the
     /// face-scan UI to warn "too many faces" — it never gates gameplay.
@@ -131,6 +135,12 @@ final class GazeTracker: NSObject, ObservableObject {
     // to reject anyone else — a substitute player must never inherit the lock.
     private var lockedExtent = SIMD3<Double>(repeating: 0)
     private var lockedShape: [Double] = []
+    // Rolling buffer of the pre-lock face's recent shape/extent, averaged into
+    // the stored fingerprint at lock so the reference is a clean mean, not one
+    // noisy frame. Only filled while EXACTLY one face is visible before lock, so
+    // every entry is the same (soon-to-be-locked) person.
+    private var preLockShapes: [[Double]] = []
+    private var preLockExtents: [SIMD3<Double>] = []
     // When the UUID-followed anchor first stopped matching the locked identity.
     // A short grace before dropping the lock absorbs a transient bad frame; a
     // sustained mismatch (a substitute player) drops through to face-lost.
@@ -243,8 +253,12 @@ final class GazeTracker: NSObject, ObservableObject {
               best.eyeBlink < config.eyeClosedThreshold else { return false }
         lockedAnchorID = best.id
         meshAnchorID = best.id      // overlay tracks the locked player
-        lockedExtent = best.extent  // identity fingerprint for re-acquisition
-        lockedShape = best.shape
+        // Average the buffered pre-lock frames for a low-noise fingerprint; fall
+        // back to this single frame if too few were captured (e.g. instant lock).
+        lockedExtent = averagedExtent(fallback: best.extent)
+        lockedShape = averagedShape(fallback: best.shape)
+        preLockShapes.removeAll(keepingCapacity: true)
+        preLockExtents.removeAll(keepingCapacity: true)
         identityLostSince = nil
         baseAzimuth = best.camAzimuthDeg      // neutral = where player looks now
         baseElevation = best.camElevationDeg
@@ -258,6 +272,7 @@ final class GazeTracker: NSObject, ObservableObject {
         wasPeeking = false
         isFrustrated = false
         frustratedSince = nil
+        identityRejected = false
         return true
         #else
         isCalibrated = true
@@ -271,9 +286,35 @@ final class GazeTracker: NSObject, ObservableObject {
         meshAnchorID = nil
         lockedExtent = SIMD3<Double>(repeating: 0)
         lockedShape = []
+        preLockShapes.removeAll(keepingCapacity: true)
+        preLockExtents.removeAll(keepingCapacity: true)
         identityLostSince = nil
         lockedFrozenSince = nil
+        identityRejected = false
         isCalibrated = false
+    }
+
+    /// Element-wise mean of the buffered pre-lock shape vectors (those matching
+    /// `fallback`'s length). Falls back to the single lock frame when too few
+    /// frames were buffered — a mean over the stable window is far less noisy
+    /// than one frame, so the locked reference separates cleanly from a
+    /// substitute without tightening the accept tolerance.
+    private func averagedShape(fallback: [Double]) -> [Double] {
+        let n = fallback.count
+        guard n > 0 else { return fallback }
+        let valid = preLockShapes.filter { $0.count == n }
+        guard valid.count >= config.preLockMinSignatureFrames else { return fallback }
+        var sum = [Double](repeating: 0, count: n)
+        for s in valid { for i in 0..<n { sum[i] += s[i] } }
+        return sum.map { $0 / Double(valid.count) }
+    }
+
+    /// Mean of the buffered pre-lock face-extents; single lock frame if too few.
+    private func averagedExtent(fallback: SIMD3<Double>) -> SIMD3<Double> {
+        guard preLockExtents.count >= config.preLockMinSignatureFrames else { return fallback }
+        var sum = SIMD3<Double>(repeating: 0)
+        for e in preLockExtents { sum += e }
+        return sum / Double(preLockExtents.count)
     }
 
     // MARK: Manual fallback (Simulator / unsupported)
@@ -416,16 +457,24 @@ final class GazeTracker: NSObject, ObservableObject {
         return (az, el)
     }
 
+    /// Number of canonical-mesh vertices sampled for the shape signature. More
+    /// points = lower per-frame variance of the match error, so a substitute
+    /// stays reliably ABOVE `faceShapeToleranceRatio` instead of dipping under
+    /// it on a noisy frame. Was 24; 48 stabilises the estimate without shifting
+    /// the error scale enough to need a tolerance re-tune — loosen the accept
+    /// tolerance only if the REAL player ever gets falsely dropped.
+    nonisolated static let shapeSampleTarget = 48
+
     /// Scale-free shape profile: distance from mesh centroid at a fixed
     /// stride over the canonical vertex list, normalised by the mean. Same
     /// person ≈ same profile across distance and (mostly) expression; a
-    /// different face diverges. One pass + ~24 samples — negligible at 30 Hz.
+    /// different face diverges. One pass + ~48 samples — negligible at 30 Hz.
     nonisolated static func shapeSignature(_ verts: [SIMD3<Float>]) -> [Double] {
         guard verts.count > 32 else { return [] }
         var centroid = SIMD3<Float>(repeating: 0)
         for v in verts { centroid += v }
         centroid /= Float(verts.count)
-        let step = max(1, verts.count / 24)
+        let step = max(1, verts.count / shapeSampleTarget)
         var dists: [Double] = []
         var i = 0
         while i < verts.count {
@@ -478,8 +527,25 @@ final class GazeTracker: NSObject, ObservableObject {
         let tracked = samples.filter { $0.tracked }.count
         if tracked != visibleFaceCount { visibleFaceCount = tracked }
 
-        // Before lock: report presence so calibration can proceed.
+        // Before lock: report presence so calibration can proceed, and buffer
+        // the fingerprint of the single stable face so the lock captures an
+        // AVERAGED signature (clean reference → real player matches
+        // consistently, substitute separates further). Any frame that is not
+        // exactly one face resets the buffer — never mix two people.
         guard let id = lockedAnchorID else {
+            let trackedFaces = samples.filter { $0.tracked }
+            if trackedFaces.count == 1, let f = trackedFaces.first, !f.shape.isEmpty {
+                preLockShapes.append(f.shape)
+                preLockExtents.append(f.extent)
+                let cap = config.preLockSignatureFrames
+                if preLockShapes.count > cap {
+                    preLockShapes.removeFirst(preLockShapes.count - cap)
+                    preLockExtents.removeFirst(preLockExtents.count - cap)
+                }
+            } else if trackedFaces.count != 1 {
+                preLockShapes.removeAll(keepingCapacity: true)
+                preLockExtents.removeAll(keepingCapacity: true)
+            }
             evaluate(samples.contains { $0.tracked } ? .lookingAtScreen : .noFace)
             return
         }
@@ -533,6 +599,12 @@ final class GazeTracker: NSObject, ObservableObject {
             if let rebound = locked { lockedAnchorID = rebound.id; meshAnchorID = rebound.id }   // rebind same person
         }
         guard let locked else {
+            // A face IS present but it is NOT the locked player → substitute.
+            // Flag it so the HUD can say "different face" instead of the generic
+            // face-lost prompt. (No face at all → not an imposter, leave false.)
+            let someoneElse = config.faceMatchEnabled && lockedExtent.x > 0
+                && samples.contains { $0.tracked }
+            if identityRejected != someoneElse { identityRejected = someoneElse }
             if Date().timeIntervalSince(lastSeenLocked) > config.faceLostGraceSeconds {
                 #if DEBUG
                 print("[GazeTracker] faceLost — last yawDelta \(String(format: "%.1f", lastYawDelta))° vs hardAway gate \(config.hardLookAwayYawThresholdDeg)°")
@@ -542,6 +614,7 @@ final class GazeTracker: NSObject, ObservableObject {
             return
         }
         lastSeenLocked = Date()
+        if identityRejected { identityRejected = false }   // real player re-acquired
 
         // Frozen-mesh guard: a live face always micro-jitters. If the locked
         // pose is byte-identical for staleFaceSeconds, ARKit is replaying a

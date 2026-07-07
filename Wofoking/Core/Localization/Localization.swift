@@ -12,7 +12,7 @@ enum L10nKey: String {
     case start, level, deleteApp, settings, back, retry, continueGame
     case language, theme, heartRate, voiceMocking
     case deleteConfirmTitle, yes, no
-    case faceLookAway, faceLookBack, faceCalibrating, faceLost, noFace
+    case faceLookAway, faceLookBack, faceCalibrating, faceLost, noFace, imposterDetected
     case faceScanInstruction, faceScanInstructionSecondary, faceScanTooMany
     case glitchWait, glitchNotYou, glitchDetected
     case cameraDeniedTitle, cameraDeniedBody, openSettings
@@ -67,6 +67,7 @@ struct Localization {
         .faceLookBack: "Look back when it's 100%.",
         .faceCalibrating: "Hold still…",
         .faceLost: "Come back to the camera.",
+        .imposterDetected: "Different face. Only the locked player may play.",
         .noFace: "I can't annoy you if I can't see you.",
         .faceScanInstruction: "Keep only one face in the frame.",
         .faceScanInstructionSecondary: "The loading bar gets confused when it sees company.",
@@ -101,6 +102,7 @@ struct Localization {
         .faceLookBack: "Menoleh kembali saat 100%.",
         .faceCalibrating: "Diam dulu…",
         .faceLost: "Kembali ke kamera.",
+        .imposterDetected: "Wajah berbeda. Hanya pemain terkunci yang boleh main.",
         .noFace: "Aku tak bisa mengganggumu kalau tak melihatmu.",
         .faceScanInstruction: "Jaga hanya satu wajah di dalam frame.",
         .faceScanInstructionSecondary: "Loading bar bingung kalau melihat ada teman.",

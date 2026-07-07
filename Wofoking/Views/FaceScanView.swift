@@ -58,7 +58,7 @@ struct FaceScanView: View {
                 .foregroundStyle(tooManyFaces ? .yellow : (detected ? .green : .white))
                 .animation(.easeInOut, value: statusText)
                 .animation(.easeInOut, value: vm.faceCount)
-                .offset(y: -40)
+                .padding(.top, 16)   // sit clearly BELOW the reticle box, not inside it
             Spacer()
         }
         .padding(.horizontal, 40)

@@ -106,7 +106,11 @@ struct GameContainerView: View {
                 .frame(minHeight: 44)
                 .animation(.default, value: vm.mockLine)
 
-            if vm.engineState == .faceLost {
+            if vm.identityRejected {
+                Text(loc.t(.imposterDetected))
+                    .foregroundStyle(.red).font(.headline)
+                    .multilineTextAlignment(.center)
+            } else if vm.engineState == .faceLost {
                 Text(loc.t(.faceLost)).foregroundStyle(.yellow).font(.headline)
             }
 

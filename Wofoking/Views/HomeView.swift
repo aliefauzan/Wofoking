@@ -50,11 +50,17 @@ struct HomeView: View {
                 }
                 .frame(maxWidth: .infinity)
             }
-            // Hyperspeed: the whole scene blasts toward/through the open
-            // doorway — big zoom anchored at the opening with a speed blur —
-            // and the black doorway interior swallows the screen.
-            .scaleEffect(rushing ? 18 : 1, anchor: doorAnchor)
-            .blur(radius: rushing ? 14 : 0)
+            // Hyperspeed dive: the whole scene blasts THROUGH the open doorway.
+            // A hard-accelerating zoom anchored at the opening, plus a forward
+            // 3D tilt (perspective plunge) so it reads as diving into the dark
+            // interior rather than a flat magnification. Speed blur ramps up.
+            .scaleEffect(rushing ? 26 : 1, anchor: doorAnchor)
+            .rotation3DEffect(
+                .degrees(rushing ? 11 : 0),
+                axis: (x: 1, y: 0, z: 0),
+                anchor: doorAnchor,
+                perspective: 0.7)
+            .blur(radius: rushing ? 20 : 0)
         }
         .ignoresSafeArea()
         .contentShape(Rectangle())
@@ -64,7 +70,7 @@ struct HomeView: View {
         .overlay {
             Color.black
                 .opacity(rushing ? 1 : 0)
-                .animation(rushing ? .easeIn(duration: 0.42).delay(0.18) : nil, value: rushing)
+                .animation(rushing ? .easeIn(duration: 0.34).delay(0.12) : nil, value: rushing)
                 .ignoresSafeArea()
                 .allowsHitTesting(false)
         }
@@ -126,9 +132,11 @@ struct HomeView: View {
         withAnimation(.easeInOut(duration: 1.1)) { doorOpen = true }
         Task {
             try? await Task.sleep(for: .milliseconds(1050))
-            // 2. Hyperspeed rush through the opening — hard accelerating zoom.
-            withAnimation(.easeIn(duration: 0.6)) { rushing = true }
-            try? await Task.sleep(for: .milliseconds(650))
+            // 2. Hyperspeed rush through the opening — a hard exponential
+            // suck-in (slow lean, then a violent plunge), faster than before,
+            // diving into the dark doorway interior.
+            withAnimation(.timingCurve(0.7, 0, 0.98, 0.4, duration: 0.45)) { rushing = true }
+            try? await Task.sleep(for: .milliseconds(500))
             // 3. Screen is black — swap to the game unseen.
             path.append(.game(.two))   // L1 retired — play starts straight at L2
         }
@@ -223,10 +231,10 @@ struct RedDoorView: View {
             // Panel falls into shadow as it swings away from the glow.
             .overlay(Color.black.opacity(open ? 0.55 : 0))
             .rotation3DEffect(
-                .degrees(open ? -85 : 0),
+                .degrees(open ? -88 : 0),
                 axis: (x: 0, y: 1, z: 0),
                 anchor: .leading,
-                perspective: 0.3)
+                perspective: 0.55)
         }
     }
 }

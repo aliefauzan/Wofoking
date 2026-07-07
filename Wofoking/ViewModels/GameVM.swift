@@ -30,6 +30,9 @@ final class GameVM: ObservableObject {
     @Published private(set) var canGiveUp = false
     @Published private(set) var gazeState: GazeState = .noFace
     @Published private(set) var peekCount = 0
+    /// True when a face other than the locked player is in frame after lock,
+    /// so the HUD can warn "different face". Mirrored from the tracker.
+    @Published private(set) var identityRejected = false
     /// Flips true once a stable face is locked, so the Face Scan screen can run
     /// its (visual-only) glitch before advancing to the storyline.
     @Published private(set) var faceLocked = false
@@ -64,6 +67,7 @@ final class GameVM: ObservableObject {
         engine.$peekCount.assign(to: &$peekCount)
         engine.mocking.$currentLine.assign(to: &$mockLine)
         tracker.$gaze.assign(to: &$gazeState)
+        tracker.$identityRejected.assign(to: &$identityRejected)
         tracker.$visibleFaceCount.assign(to: &$faceCount)
         tracker.$debugConeDeg.assign(to: &$debugConeDeg)
         tracker.$debugShapeErr.assign(to: &$debugShapeErr)

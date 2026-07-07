@@ -102,8 +102,12 @@ final class ConfigService {
     /// Looser → survives more expression change but weakens the imposter gate.
     /// Set from on-device badge readings: same player measured err 0.016–0.022
     /// (even mid-turn), an imposter measured 0.036 and slipped through the old
-    /// 0.05 — 0.03 sits between the two observed bands.
-    var faceShapeToleranceRatio: Double = 0.03
+    /// 0.05. Tightened to 0.015: the pre-lock frame AVERAGING (preLockSignature*)
+    /// + richer 48-point signature pull the real player's err well below the old
+    /// single-frame 0.016–0.022 band, so this hard cut rejects a substitute
+    /// aggressively. If the REAL player ever reads above 0.015 on the debug badge
+    /// (`id`) and gets dropped, loosen this back toward 0.02.
+    var faceShapeToleranceRatio: Double = 0.015
     /// Continuous identity check runs whenever the head is within this yaw/
     /// pitch off the calibrated neutral (deg). Set high — past the look-away
     /// gate — so a substitute can't dodge the check by playing turned-away
@@ -116,6 +120,15 @@ final class ConfigService {
     /// dropped — absorbs a transient bad frame / expression spike without
     /// letting a real substitute keep the lock.
     var identityGraceSeconds: TimeInterval = 0.4
+    /// Frames of the stable, single-face pre-lock window averaged into the
+    /// stored fingerprint. One frame is noisy; a mean over ~15 frames is a
+    /// clean reference, so the REAL player matches more consistently and a
+    /// substitute's error stays reliably above `faceShapeToleranceRatio`
+    /// instead of dipping under it on a lucky noisy frame.
+    var preLockSignatureFrames = 15
+    /// Minimum buffered frames before the averaged signature is used; below
+    /// this the single lock frame is kept (e.g. an instant lock with no window).
+    var preLockMinSignatureFrames = 5
 
     // MARK: Frozen-mesh guard
 
