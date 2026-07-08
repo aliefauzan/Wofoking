@@ -6,9 +6,9 @@
 //  before the loading gameplay begins (App Flow: Face Scan → Storyline →
 //  Gameplay). Plays the bundled `0708.mp4` (a ~77 s dark-forest render with a
 //  full horror soundscape — door slam, breathing, heartbeat, the "X" voice,
-//  jumpscare, crying girl) full-screen, and overlays timed captions taken from
-//  `horror_script_scene.md`, synced to the audio (timings measured from the
-//  video's loudness envelope). The native `BedtimeStoryBackground` sits behind
+//  jumpscare, crying girl) full-screen, and overlays timed captions of the
+//  spoken lines, hand-synced to the audio (start/end in `captions`, converted
+//  from the video's SS:FF timecodes). The native `BedtimeStoryBackground` sits behind
 //  the video as a fallback if the asset fails to load. There is no skip — the
 //  player must watch the whole cinematic; it advances only when the video plays
 //  to the end. No permissions, no face data — pure playback + text.
@@ -130,21 +130,20 @@ struct StorylineView: View {
 
     // MARK: - Caption track
 
-    /// One caption per dialogue/story beat from `horror_script_scene.md`, timed
-    /// to `0708.mp4`'s audio (start/end in seconds; measured from the loudness
-    /// envelope). Gaps are intentional — e.g. the dead-silent dread beat around
-    /// 61–64 s shows nothing. English only: the soundscape is English.
+    /// One caption per spoken line in `0708.mp4`, hand-timed to the audio.
+    /// Start/end are in seconds, converted from the video's `SS:FF` timecodes
+    /// (30 fps → frames/30). Gaps are intentional silence between lines.
     private struct Caption { let start: Double; let end: Double; let text: String }
     private static let captions: [Caption] = [
-        Caption(start: 11,   end: 16,   text: "Where am I…? Where the hell am I?"),
-        Caption(start: 18,   end: 23,   text: "Where's my flashlight—"),
-        Caption(start: 27,   end: 30.5, text: "\"I want to eat your soul.\""),
-        Caption(start: 31.5, end: 36.5, text: "What was that?! Who's there?!"),
-        Caption(start: 44,   end: 49,   text: "Nothing. Just peeling wallpaper and dust."),
-        Caption(start: 51,   end: 56,   text: "A figure — tall, wrong. Then gone."),
-        Caption(start: 57.5, end: 61,   text: "No. I'm getting out of here—"),
-        Caption(start: 65.5, end: 71,   text: "Down the hall… a little girl, crying."),
-        Caption(start: 72,   end: 76.5, text: "Closer. It's getting closer."),
+        Caption(start: 0.47,  end: 3.80,  text: "Hello?"),                       // 0:14–3:24
+        Caption(start: 4.47,  end: 7.80,  text: "Where am I?"),                  // 4:14–7:24
+        Caption(start: 8.30,  end: 9.27,  text: "Shit…"),                        // 8:09–9:08
+        Caption(start: 9.40,  end: 10.87, text: "My flashlight—where is it?"),   // 9:12–10:26
+        Caption(start: 15.93, end: 17.37, text: "What the FUCK…?"),              // 15:28–17:11
+        Caption(start: 17.43, end: 19.07, text: "Who is there?!"),              // 17:13–19:02
+        Caption(start: 20.67, end: 23.03, text: "Why doesn't it work?!!"),       // 20:20–23:01
+        Caption(start: 28.03, end: 29.27, text: "SHIT!!"),                       // 28:01–29:08
+        Caption(start: 29.83, end: 32.20, text: "Who are you!!"),                // 29:25–32:06
     ]
 }
 
