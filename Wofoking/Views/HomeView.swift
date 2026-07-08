@@ -35,6 +35,15 @@ struct HomeView: View {
             ZStack {
                 ForestMenuBackground()
 
+                // Breathing limbs from the RANTING BAGOYANG export, interleaved
+                // with static tree overlays at the export's z-bands so each limb
+                // stays whole and slides *behind* the trees in front of it
+                // (deep limbs behind mid-trees, front limbs behind upper-trees).
+                SwayingBranches(band: .deep)
+                MenuTreeOverlay(asset: "MenuTreesMid")
+                SwayingBranches(band: .front)
+                MenuTreeOverlay(asset: "MenuTreesUpper")
+
                 doorway(in: geo.size)
 
                 // Front mist, jagged ground, grain and logo — over the door,
