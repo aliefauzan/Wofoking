@@ -16,18 +16,30 @@ enum Route: Hashable {
 struct RootView: View {
     @StateObject private var store = PersistenceStore.shared
     @State private var path: [Route] = []
+    // Warning splashes play on every app open before HomeView is revealed.
+    @State private var showSplash = true
 
     var body: some View {
-        NavigationStack(path: $path) {
-            HomeView(path: $path)
-                .navigationDestination(for: Route.self) { route in
-                    switch route {
-                    case .levelSelect:
-                        LevelSelectView(path: $path)
-                    case .game(let level):
-                        GameContainerView(level: level, path: $path)
+        ZStack {
+            NavigationStack(path: $path) {
+                HomeView(path: $path)
+                    .navigationDestination(for: Route.self) { route in
+                        switch route {
+                        case .levelSelect:
+                            LevelSelectView(path: $path)
+                        case .game(let level):
+                            GameContainerView(level: level, path: $path)
+                        }
                     }
+            }
+
+            if showSplash {
+                SplashSequenceView {
+                    withAnimation(.easeInOut(duration: 0.4)) { showSplash = false }
                 }
+                .transition(.opacity)
+                .zIndex(1)
+            }
         }
         .environmentObject(store)
         .preferredColorScheme(store.settings.theme.colorScheme)
