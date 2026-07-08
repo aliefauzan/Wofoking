@@ -30,15 +30,21 @@ struct GameContainerView: View {
 
     var body: some View {
         ZStack {
-            LoadAwayBackground()
-            // Real camera feed behind the gameplay HUD (PRD: real camera). Also
-            // shown during the Face Scan screen so the detection reticle has the
-            // live face to sit on.
-            if (vm.phase == .playing || vm.phase == .calibrating) && !vm.isManual {
+            // Camera feed = "old style". Shown when the face mesh is ON (during
+            // play and calibration) and always during calibration so the face-scan
+            // reticle has a live face to sit on. When the mesh is OFF during play,
+            // the background is full black — only the load bar, BPM, and text show.
+            let showCamera = !vm.isManual &&
+                ((vm.phase == .playing && store.settings.debugFaceMesh)
+                 || vm.phase == .calibrating)
+            if showCamera {
+                LoadAwayBackground()
                 CameraPreviewView(tracker: vm.gaze, showFaceMesh: store.settings.debugFaceMesh)
                     .ignoresSafeArea()
                 Color.black.opacity(store.settings.debugFaceMesh ? 0.15 : 0.45)
                     .ignoresSafeArea()
+            } else {
+                Color.black.ignoresSafeArea()
             }
             content
         }
@@ -59,6 +65,7 @@ struct GameContainerView: View {
         case .unsupported, .playing: gameplay
         case .calibrating:  FaceScanView(vm: vm, loc: loc) { vm.finishFaceScan() }
         case .storyline:    StorylineView(loc: loc) { vm.finishStoryline() }
+        case .intro:        IntroVideoView { vm.finishIntro() }
         }
     }
 

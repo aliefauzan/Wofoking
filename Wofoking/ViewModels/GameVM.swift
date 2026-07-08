@@ -19,6 +19,7 @@ final class GameVM: ObservableObject {
         case unsupported
         case calibrating   // Face Detection / Face Scan screen
         case storyline     // static horror-satire intro after a stable face
+        case intro         // pre-rendered animation clip, right before gameplay
         case playing
     }
 
@@ -149,6 +150,12 @@ final class GameVM: ObservableObject {
     /// Called by the storyline screen when the last line has been read.
     func finishStoryline() {
         guard phase == .storyline else { return }
+        phase = .intro
+    }
+
+    /// Called by the intro animation screen when the clip ends (or on skip).
+    func finishIntro() {
+        guard phase == .intro else { return }
         startPlaying()
     }
 

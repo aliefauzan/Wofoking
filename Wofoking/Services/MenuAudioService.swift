@@ -24,6 +24,7 @@ final class MenuAudioService {
     // mid-clip. Distinct players so the loop keeps running under the SFX.
     private var bgmPlayer: AVAudioPlayer?
     private var doorPlayer: AVAudioPlayer?
+    private var splashPlayer: AVAudioPlayer?
 
     /// Muteable from Settings (same gate the voice/effects honour).
     var enabled: Bool = true
@@ -73,6 +74,38 @@ final class MenuAudioService {
     func stopBackground() {
         bgmPlayer?.stop()
         bgmPlayer = nil
+    }
+
+    // MARK: - Splash hum
+
+    /// Start the looping electrical hum that plays under the warning splashes,
+    /// from the first frame until the last warning is dismissed. Idempotent.
+    func startSplashHum() {
+        guard enabled else { return }
+        if splashPlayer?.isPlaying == true { return }
+        guard let url = clipURL("SplashHum") else { return }
+        activateSession()
+        do {
+            let p = try AVAudioPlayer(contentsOf: url)
+            p.numberOfLoops = -1          // loop under the whole splash sequence
+            p.volume = 0.8
+            splashPlayer = p
+            p.prepareToPlay()
+            p.play()
+        } catch {
+            splashPlayer = nil
+        }
+    }
+
+    /// Fade the hum out, then stop — called as the last warning hands off to
+    /// HomeView so the menu backsound comes in cleanly.
+    func stopSplashHum(fadeDuration: TimeInterval = 0.4) {
+        guard let p = splashPlayer else { return }
+        p.setVolume(0, fadeDuration: fadeDuration)
+        DispatchQueue.main.asyncAfter(deadline: .now() + fadeDuration) { [weak self] in
+            self?.splashPlayer?.stop()
+            self?.splashPlayer = nil
+        }
     }
 
     // MARK: - Door SFX
