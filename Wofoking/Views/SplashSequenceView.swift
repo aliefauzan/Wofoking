@@ -42,8 +42,14 @@ struct SplashSequenceView: View {
         .contentShape(Rectangle())
         .onTapGesture { advance() }
         .animation(.easeInOut(duration: 0.35), value: index)
-        .onAppear { scheduleAdvance() }
-        .onDisappear { advanceTask?.cancel() }
+        .onAppear {
+            MenuAudioService.shared.startSplashHum()
+            scheduleAdvance()
+        }
+        .onDisappear {
+            advanceTask?.cancel()
+            MenuAudioService.shared.stopSplashHum()
+        }
     }
 
     private func scheduleAdvance() {
@@ -62,6 +68,7 @@ struct SplashSequenceView: View {
             index += 1
             scheduleAdvance()
         } else {
+            MenuAudioService.shared.stopSplashHum()
             onFinished()
         }
     }
