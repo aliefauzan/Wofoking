@@ -114,8 +114,8 @@ final class ConfigService {
     /// (anchor-local shape is pose-independent, so verification is valid at
     /// these angles). Only true near-profile beyond this is skipped, where
     /// ARKit's mesh fit is genuinely noisy.
-    var identityVerifyMaxYawDeg: Double = 55
-    var identityVerifyMaxPitchDeg: Double = 55
+    var identityVerifyMaxYawDeg: Double = 50
+    var identityVerifyMaxPitchDeg: Double = 50
     /// A sustained identity mismatch must persist this long before the lock is
     /// dropped — absorbs a transient bad frame / expression spike without
     /// letting a real substitute keep the lock.
@@ -260,4 +260,6 @@ final class ConfigService {
     var storyPageFadeSeconds: TimeInterval = 0.7
     /// Delay after the final line before auto-continuing into gameplay.
     var storyAutoContinueSeconds: TimeInterval = 2.2
+    /// Fade duration for a caption appearing/disappearing over the video.
+    var storyCaptionFadeSeconds: TimeInterval = 0.45
 }
