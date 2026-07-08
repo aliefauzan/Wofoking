@@ -65,7 +65,6 @@ struct GameContainerView: View {
         case .unsupported, .playing: gameplay
         case .calibrating:  FaceScanView(vm: vm, loc: loc) { vm.finishFaceScan() }
         case .storyline:    StorylineView(loc: loc) { vm.finishStoryline() }
-        case .intro:        IntroVideoView { vm.finishIntro() }
         }
     }
 
