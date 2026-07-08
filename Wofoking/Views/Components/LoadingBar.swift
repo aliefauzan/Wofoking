@@ -13,6 +13,14 @@ struct LoadingBar: View {
 
     var body: some View {
         VStack(spacing: 12) {
+            Text("\(Int(progress))%")
+                .font(.system(size: 44, weight: .heavy, design: .rounded))
+                .foregroundStyle(.white)
+                .frame(maxWidth: .infinity, alignment: .center)
+                .contentTransition(.numericText())
+                .scaleEffect(atWindow ? 1.12 : 1)
+                .animation(.spring(duration: 0.25), value: atWindow)
+
             GeometryReader { geo in
                 ZStack(alignment: .leading) {
                     Capsule().fill(Color.white.opacity(0.15))
@@ -23,21 +31,10 @@ struct LoadingBar: View {
                 }
             }
             .frame(height: 22)
-
-            Text("\(Int(progress))%")
-                .font(.system(size: 44, weight: .heavy, design: .rounded))
-                .foregroundStyle(.white)
-                .contentTransition(.numericText())
-                .scaleEffect(atWindow ? 1.12 : 1)
-                .animation(.spring(duration: 0.25), value: atWindow)
         }
     }
 
     private var fillColor: Color {
-        switch progress {
-        case ..<75:  return Color(red: 0.55, green: 0.45, blue: 0.85)
-        case ..<90:  return Color(red: 0.95, green: 0.75, blue: 0.35)
-        default:     return Color(red: 0.95, green: 0.40, blue: 0.45)
-        }
+        .white
     }
 }
