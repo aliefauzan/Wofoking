@@ -85,10 +85,6 @@ final class ConfigService {
     /// If the player is STILL staring this long after the nudge (never looked
     /// away yet), the firmer follow-up prompt fires (`.startupDemand`).
     var startupDemandDelaySeconds: TimeInterval = 5.0
-    /// Where the clean fake-loading bar climbs to over the grace window. Kept
-    /// mid-way (not 100) so it reads as loading-in-progress and leaves real
-    /// look-away distance to the finish once the mechanic reveals itself.
-    var startupFakeLoadTarget: Double = 60.0
     /// Upper bound on a single engine tick's dt. Without it a main-thread
     /// hitch (on-device AI taunt inference, thermal stall) lands seconds of
     /// fill or penalty in the one tick that fires after the stall.

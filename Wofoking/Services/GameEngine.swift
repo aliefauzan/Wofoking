@@ -94,6 +94,7 @@ final class GameEngine: ObservableObject {
         startupDemandDone = false
         previousGaze = gaze.gaze
         state = .lookingAtScreen
+        mocking.clear()   // no leftover caption during the clean startup grace
         VoiceService.shared.enabled = persistence.settings.voiceMockingEnabled
         if persistence.settings.heartRateEnabled { HeartRateService.shared.enable() }
         startTimer()
@@ -148,18 +149,12 @@ final class GameEngine: ObservableObject {
         let g = gaze.gaze
         defer { previousGaze = g }
 
-        // Startup intro (clean fake loading): for the first `startupGraceSeconds`
-        // the bar is a genuinely plain loading bar — gaze-independent auto-fill,
-        // no taunts, no caption — so the player believes it's really loading.
-        // The gaze mechanic and every taunt below are skipped until it elapses.
+        // Startup intro: the bar fills only the real way (by looking away); we
+        // just stay quiet for the first `startupGraceSeconds` — no prompt, no
+        // taunts — so the opening reads as a plain loading bar before the game
+        // reveals itself. `inStartupGrace` mutes every caption below.
         let sinceStart = now.timeIntervalSince(levelStartAt)
-        if sinceStart < config.startupGraceSeconds {
-            if !mocking.currentLine.isEmpty { mocking.clear() }
-            loader.fakeLoad(dt, to: config.startupFakeLoadTarget,
-                            over: config.startupGraceSeconds)
-            syncProgress()
-            return
-        }
+        let inStartupGrace = sinceStart < config.startupGraceSeconds
 
         // Reveal Give Up after a continuous stretch of looking at the screen.
         if g == .lookingAtScreen {
@@ -185,7 +180,9 @@ final class GameEngine: ObservableObject {
                     windowConsumed = Date().timeIntervalSince(s)
                 }
                 state = .faceLost
-                mocking.emit(.inviteLookBack, speak: false, language: language)
+                if !inStartupGrace {
+                    mocking.emit(.inviteLookBack, speak: false, language: language)
+                }
             }
             return
         }
@@ -225,21 +222,21 @@ final class GameEngine: ObservableObject {
         // Heart-rate driven volatility (L2): elevated BPM → more chaotic bar.
         let elevated = persistence.settings.heartRateEnabled && HeartRateService.shared.isElevated
         loader.heartRateHigh = elevated
-        if elevated && !wasElevated {                       // rising edge → sabotage taunt
+        if elevated && !wasElevated && !inStartupGrace {    // rising edge → sabotage taunt
             mocking.emit(.heartRateSpike, progress: loader.progress,
                          speak: persistence.settings.voiceMockingEnabled, language: language)
         }
         wasElevated = elevated
 
         // Frustration taunt: caught scowling at the screen (rising edge only).
-        if gaze.isFrustrated && !wasFrustrated {
+        if gaze.isFrustrated && !wasFrustrated && !inStartupGrace {
             mocking.emit(.frustrated, progress: loader.progress,
                          speak: persistence.settings.voiceMockingEnabled, language: language)
         }
         wasFrustrated = gaze.isFrustrated
 
         // Peek tax: punish each newly-caught peek while actively playing.
-        if config.peekTaxEnabled, gaze.peekCount > lastPeekCount,
+        if config.peekTaxEnabled, !inStartupGrace, gaze.peekCount > lastPeekCount,
            state == .lookingAway || state == .lookingAtScreen {
             lastPeekCount = gaze.peekCount
             onPeek()
@@ -411,6 +408,8 @@ final class GameEngine: ObservableObject {
     }
 
     private func maybeInvite() {
+        // Silent during the startup grace — keep the plain-loading illusion.
+        guard Date().timeIntervalSince(levelStartAt) >= config.startupGraceSeconds else { return }
         // Occasionally lure the player to look back early.
         guard Double.random(in: 0...1) < 0.25 else { return }
         lastInviteAt = Date()

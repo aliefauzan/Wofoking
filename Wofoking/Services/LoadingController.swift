@@ -43,15 +43,6 @@ final class LoadingController {
         progress = min(100, max(0, progress + delta))
     }
 
-    /// Startup intro: a plain, gaze-independent loading ramp toward `target`,
-    /// paced to reach it after `seconds` of grace, so the opening reads as a
-    /// genuine loading bar before the real look-away mechanic takes over.
-    func fakeLoad(_ dt: TimeInterval, to target: Double, over seconds: TimeInterval) {
-        guard seconds > 0 else { progress = target; return }
-        progress = min(target, progress + (target / seconds) * dt)
-        lastCheckpoint = progress
-    }
-
     // MARK: Fake-out (L2 rage bait)
 
     /// Pin the bar to the cusp of completion for a dramatic "you made it!" beat.
