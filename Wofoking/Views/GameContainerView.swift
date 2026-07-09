@@ -82,11 +82,15 @@ struct GameContainerView: View {
             else { vm.engine.pauseForBackground() }
         }
         .onChange(of: vm.engineState) { _, s in
-            // Fire the jumpscare the moment the bar tops out or the win lands.
-            guard !showJumpscare, s == .reached100 || s == .win || s == .levelCompleted else { return }
+            // Fire the jumpscare only once the WIN actually lands. Reaching 100%
+            // (.reached100) just OPENS the ~2s window — the engine then requires
+            // the player to look at the screen to win, or drops into a penalty if
+            // they stay away. Triggering on .reached100 here froze the loop before
+            // handleWindow could run, so the bar instant-won without the look.
+            guard !showJumpscare, s == .win || s == .levelCompleted else { return }
             vm.engine.stop()   // freeze the loop so no further ticks / taunts fire under the scare
-            // Reaching 100% pre-empts the engine's own win(), so credit the
-            // progression here too — otherwise the next level never unlocks.
+            // engine.win() already unlocks + records lastLevel; mirror it here so
+            // the view-side progression can't miss it.
             if let next = Level(rawValue: level.rawValue + 1) { store.unlock(next) }
             store.lastLevel = level
             withAnimation(.easeOut(duration: 0.1)) { showJumpscare = true }
