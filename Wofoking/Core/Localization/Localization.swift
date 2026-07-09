@@ -13,7 +13,7 @@ enum L10nKey: String {
     case language, theme, heartRate, voiceMocking
     case deleteConfirmTitle, yes, no
     case faceLookAway, faceLookBack, faceCalibrating, faceLost, noFace, imposterDetected
-    case faceScanInstruction, faceScanInstructionSecondary, faceScanTooMany
+    case faceScanInstruction, faceScanTooMany
     case glitchWait, glitchNotYou, glitchDetected
     case cameraDeniedTitle, cameraDeniedBody, openSettings
     case unsupportedDevice
@@ -70,7 +70,6 @@ struct Localization {
         .imposterDetected: "Different face. Only the locked player may play.",
         .noFace: "I can't annoy you if I can't see you.",
         .faceScanInstruction: "Keep only one face in the frame.",
-        .faceScanInstructionSecondary: "The loading bar gets confused when it sees company.",
         .faceScanTooMany: "Too many faces. One is enough.",
         .glitchWait: "Wait.",
         .glitchNotYou: "That was not you.",
@@ -105,7 +104,6 @@ struct Localization {
         .imposterDetected: "Wajah berbeda. Hanya pemain terkunci yang boleh main.",
         .noFace: "Aku tak bisa mengganggumu kalau tak melihatmu.",
         .faceScanInstruction: "Jaga hanya satu wajah di dalam frame.",
-        .faceScanInstructionSecondary: "Loading bar bingung kalau melihat ada teman.",
         .faceScanTooMany: "Terlalu banyak wajah. Satu saja cukup.",
         .glitchWait: "Tunggu.",
         .glitchNotYou: "Itu bukan kamu.",

@@ -74,9 +74,6 @@ struct FaceScanView: View {
             Text(loc.t(.faceScanInstruction))
                 .font(.system(.title3, design: .rounded).weight(.semibold))
                 .foregroundStyle(.white)
-            Text(loc.t(.faceScanInstructionSecondary))
-                .font(.subheadline)
-                .foregroundStyle(.white.opacity(0.75))
             // The "too many faces" block is surfaced on the status line below
             // the reticle (see `tooManyFaces`); it now HALTS the lock, not just
             // warns — GameVM won't lock until exactly one face remains.
