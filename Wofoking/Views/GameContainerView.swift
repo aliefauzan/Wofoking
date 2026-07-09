@@ -20,6 +20,10 @@ struct GameContainerView: View {
     @ObservedObject private var hr = HeartRateService.shared
     @Environment(\.scenePhase) private var scenePhase
 
+    /// The endgame gotcha: fires once the bar hits 100% / the win resolves,
+    /// then the jumpscare chain routes back to the main menu.
+    @State private var showJumpscare = false
+
     init(level: Level, path: Binding<[Route]>) {
         self.level = level
         self._path = path
@@ -59,14 +63,33 @@ struct GameContainerView: View {
                     Spacer()
                 }
             }
+
+            // Reaching 100% / winning doesn't celebrate — it jumpscares, then
+            // kicks you back to the main menu. Covers everything, no dismiss.
+            if showJumpscare {
+                JumpscareView { path.removeAll() }
+                    .transition(.opacity)
+                    .zIndex(10)
+            }
         }
         .animation(.spring(response: 0.42, dampingFraction: 0.82), value: vm.fakeNotification)
         .navigationBarBackButtonHidden(vm.phase == .playing)
         .onAppear { vm.begin() }
         .onDisappear { vm.teardown() }
         .onChange(of: scenePhase) { _, phase in
+            if showJumpscare { return }   // endgame owns the screen; ignore lifecycle churn
             if phase == .active { vm.engine.resumeFromBackground() }
             else { vm.engine.pauseForBackground() }
+        }
+        .onChange(of: vm.engineState) { _, s in
+            // Fire the jumpscare the moment the bar tops out or the win lands.
+            guard !showJumpscare, s == .reached100 || s == .win || s == .levelCompleted else { return }
+            vm.engine.stop()   // freeze the loop so no further ticks / taunts fire under the scare
+            // Reaching 100% pre-empts the engine's own win(), so credit the
+            // progression here too — otherwise the next level never unlocks.
+            if let next = Level(rawValue: level.rawValue + 1) { store.unlock(next) }
+            store.lastLevel = level
+            withAnimation(.easeOut(duration: 0.1)) { showJumpscare = true }
         }
     }
 
