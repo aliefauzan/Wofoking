@@ -8,7 +8,9 @@
 //  (the device can't reach the Mac's Voicebox engine at runtime). Any line
 //  without a clip — a Foundation Models refinement, or Indonesian, which has no
 //  Tes clips — falls back to AVSpeechSynthesizer so nothing is ever fully silent.
-//  Respects the mute setting; honours the silent switch (ambient category).
+//  Uses the .playback category so taunts are audible even when the ringer/silent
+//  switch is on (voice mocking is the core gag) — muting is the in-app setting
+//  (`enabled`), not the hardware switch. .mixWithOthers keeps other apps' audio.
 //
 
 import Foundation
@@ -21,11 +23,13 @@ final class VoiceService {
     private var player: AVAudioPlayer?   // retained — an unretained player goes silent mid-clip
 
     private init() {
-        // Mix politely with other audio; respects the ringer/silent switch
-        // because we don't override the ambient category. Configured ONCE —
-        // re-activating the session on every utterance hitched the main
-        // thread (the same thread as the 30 Hz game tick).
-        try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
+        // .playback so voice taunts sound even with the silent switch on, +
+        // .mixWithOthers so other apps' audio keeps playing under us. Configured
+        // ONCE — re-activating the session on every utterance hitched the main
+        // thread (the same thread as the 30 Hz game tick). The app also sets
+        // this at launch (WofokingApp) so the session is deterministic before
+        // any subsystem plays; this is a redundant, idempotent reinforcement.
+        try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
     }
 

@@ -9,8 +9,10 @@
 //  flatten them to the bundle root, so we try the subdirectory then a flat
 //  lookup — same pattern as VoiceService.
 //
-//  Session is .ambient + .mixWithOthers: the menu music honours the silent
-//  switch and never stomps other audio.
+//  Session is .playback + .mixWithOthers: audio plays over the ringer/silent
+//  switch (matching VoiceService, so the whole app is one consistent policy)
+//  and never stomps other apps' audio. Silence it via the in-app `enabled`
+//  gate, not the hardware switch.
 //
 
 import Foundation
@@ -35,7 +37,7 @@ final class MenuAudioService {
     }
 
     private func activateSession() {
-        try? AVAudioSession.sharedInstance().setCategory(.ambient, options: [.mixWithOthers])
+        try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
         try? AVAudioSession.sharedInstance().setActive(true)
     }
 

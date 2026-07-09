@@ -5,10 +5,26 @@
 
 import SwiftUI
 import UIKit
+import AVFoundation
 
 @main
 struct WofokingApp: App {
     @Environment(\.scenePhase) private var scenePhase
+
+    init() {
+        // One audio policy for the whole app, set before any subsystem plays so
+        // the shared AVAudioSession is deterministic (no last-writer-wins race
+        // between VoiceService / MenuAudioService, and the StorylineView cutscene
+        // player — which sets no category itself — inherits this):
+        //   .playback       → game audio (voice taunts, menu music, story
+        //                      soundtrack) is heard even with the ringer/silent
+        //                      switch on. Muting is the in-app setting, not the
+        //                      hardware switch.
+        //   .mixWithOthers  → other apps' audio keeps playing under ours.
+        // Foreground-only playback needs no UIBackgroundModes entry.
+        try? AVAudioSession.sharedInstance().setCategory(.playback, options: [.mixWithOthers])
+        try? AVAudioSession.sharedInstance().setActive(true)
+    }
 
     var body: some Scene {
         WindowGroup {
