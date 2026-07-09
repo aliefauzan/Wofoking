@@ -1,0 +1,4 @@
+Target dependency graph (2 targets)
+Target 'Wofoking' in project 'Wofoking'
+➜ Explicit dependency on target 'Wofoking Watch Watch App' in project 'Wofoking'
+Target 'Wofoking Watch Watch App' in project 'Wofoking' (no dependencies)

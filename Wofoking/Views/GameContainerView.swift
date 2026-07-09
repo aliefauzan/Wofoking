@@ -47,7 +47,20 @@ struct GameContainerView: View {
                 Color.black.ignoresSafeArea()
             }
             content
+
+            // Fake push banner: the "look at your phone" trap. Slides down from
+            // the top while the bar is loading to bait a look-back.
+            if let notif = vm.fakeNotification {
+                VStack {
+                    FakeNotificationBanner(notification: notif)
+                        .padding(.top, 8)
+                        .padding(.horizontal, 40)
+                        .transition(.move(edge: .top).combined(with: .opacity))
+                    Spacer()
+                }
+            }
         }
+        .animation(.spring(response: 0.42, dampingFraction: 0.82), value: vm.fakeNotification)
         .navigationBarBackButtonHidden(vm.phase == .playing)
         .onAppear { vm.begin() }
         .onDisappear { vm.teardown() }

@@ -1,0 +1,399 @@
+{
+  "" : {
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Wofoking-primary.dia",
+    "emit-module-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Wofoking-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Wofoking-primary-emit-module.dia",
+    "pch" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Wofoking-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Wofoking-primary.swiftdeps"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/App/WofokingApp.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/WofokingApp~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Core/Config/ConfigService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ConfigService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Core/Localization/Localization.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Localization~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Core/Localization/PhraseBank.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PhraseBank~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Core/Persistence/PersistenceStore.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/PersistenceStore~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Models/AppSettings.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/AppSettings~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Models/FakeNotification.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotification~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Models/GameState.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameState~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Models/Level.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/Level~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/FakeNotificationService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/FoundationModelsMockProvider.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FoundationModelsMockProvider~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/GameEngine.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameEngine~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/GazeTracker.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GazeTracker~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/HapticService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HapticService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/HeartRateService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HeartRateService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/LoadingController.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingController~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/MenuAudioService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MenuAudioService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/MockingService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/MockingService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Services/VoiceService.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/VoiceService~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Shared/HRMessage.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HRMessage~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/ViewModels/GameVM.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameVM~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/ViewModels/LevelVM.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelVM~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/ViewModels/SettingsVM.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsVM~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/BedtimeStoryBackground.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/BedtimeStoryBackground~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/CameraPreviewView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/CameraPreviewView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/FakeNotificationBanner.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FakeNotificationBanner~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/ForestMenuBackground.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/ForestMenuBackground~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/LoadAwayBackground.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadAwayBackground~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/Components/LoadingBar.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LoadingBar~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/DeleteConfirmView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/DeleteConfirmView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/FaceScanView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/FaceScanView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/GameContainerView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GameContainerView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/HomeView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/HomeView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/LevelSelectView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/LevelSelectView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/RootView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/RootView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/SettingsView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/SplashSequenceView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/SplashSequenceView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking/Views/StorylineView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/StorylineView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}

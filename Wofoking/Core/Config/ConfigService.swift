@@ -223,6 +223,27 @@ final class ConfigService {
     /// % per second the bar falls during the over-loading penalty.
     var penaltyDropPerSecond: Double = 14
 
+    // MARK: Fake notification (the "look at your phone" trap)
+
+    /// Master switch for the fake system-notification banner. It springs while
+    /// the player is looking AWAY (bar loading) — the sound + haptic + banner
+    /// bait them into glancing back at the phone, which pauses the bar and
+    /// usually costs an early-look-back. Pure social-engineering distraction.
+    var fakeNotifEnabled = true
+    /// Random gap (seconds) between fake-notification attempts. Each attempt
+    /// only actually fires if the player is currently looking away, so the
+    /// felt cadence is looser than this — banners land only on the traps.
+    var fakeNotifIntervalRange: ClosedRange<TimeInterval> = 7...16
+    /// The player must be looking away (bar advancing) for at least this long
+    /// before a banner is allowed — a notification the instant they turn away
+    /// reads as scripted; a beat later feels like a real push arriving.
+    var fakeNotifMinLookAwaySeconds: TimeInterval = 1.2
+    /// How long the banner stays on screen before it slides away on its own.
+    var fakeNotifDurationSeconds: TimeInterval = 4.0
+    /// Play an iOS-style chime with the banner (AudioToolbox system sound). The
+    /// sound is the real lure — it works even while the head is fully turned.
+    var fakeNotifSoundEnabled = true
+
     // MARK: Face-scan glitch (VISUAL ONLY — never touches gaze/tracking state)
 
     /// After the single face is locked, the box picks ONE top corner and jumps

@@ -22,6 +22,7 @@ enum HapticKind {
     case dramatic100    // L2 @100%
     case loadingToggle  // start/stop
     case deletePrank
+    case notification   // fake push banner — mimics the iOS notify buzz
 }
 
 final class HapticService {
@@ -47,6 +48,21 @@ final class HapticService {
     func play(_ kind: HapticKind) {
         guard supportsHaptics else { fallback(kind); return }
         #if canImport(CoreHaptics)
+        // The fake push imitates the system notify buzz: two crisp taps ~0.1s
+        // apart, not one transient.
+        if kind == .notification {
+            let taps = [0.0, 0.1].map { t in
+                CHHapticEvent(eventType: .hapticTransient, parameters: [
+                    .init(parameterID: .hapticIntensity, value: 0.9),
+                    .init(parameterID: .hapticSharpness, value: 0.9),
+                ], relativeTime: t)
+            }
+            if let pattern = try? CHHapticPattern(events: taps, parameters: []),
+               let player = try? engine?.makePlayer(with: pattern) {
+                try? player.start(atTime: 0)
+            }
+            return
+        }
         let (intensity, sharpness): (Float, Float)
         switch kind {
         case .light:         (intensity, sharpness) = (0.3, 0.3)
@@ -58,6 +74,7 @@ final class HapticService {
         case .strongWin:     (intensity, sharpness) = (1.0, 0.4)
         case .dramatic100:   (intensity, sharpness) = (1.0, 0.8)
         case .deletePrank:   (intensity, sharpness) = (0.9, 1.0)
+        case .notification:  (intensity, sharpness) = (0.9, 0.9)   // handled above
         }
         let event = CHHapticEvent(
             eventType: .hapticTransient,
@@ -78,6 +95,7 @@ final class HapticService {
         switch kind {
         case .strongWin:  UINotificationFeedbackGenerator().notificationOccurred(.success)
         case .strongFail: UINotificationFeedbackGenerator().notificationOccurred(.error)
+        case .notification: UINotificationFeedbackGenerator().notificationOccurred(.warning)
         case .barDrop, .dramatic100, .deletePrank:
             UIImpactFeedbackGenerator(style: .heavy).impactOccurred()
         case .medium:     UIImpactFeedbackGenerator(style: .medium).impactOccurred()

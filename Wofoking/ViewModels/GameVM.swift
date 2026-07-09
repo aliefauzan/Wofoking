@@ -45,9 +45,14 @@ final class GameVM: ObservableObject {
     @Published private(set) var debugShapeErr: Double = 0
     @Published private(set) var debugYawDeg: Double = 0
 
+    /// Fake push banner currently on screen (the "look at your phone" trap),
+    /// mirrored from the service for the gameplay overlay.
+    @Published private(set) var fakeNotification: FakeNotification?
+
     let gaze: GazeTracker
     let engine: GameEngine
     let level: Level
+    let notifications = FakeNotificationService()
 
     private var bag = Set<AnyCancellable>()
     private var calibrationTimer: Timer?
@@ -72,6 +77,19 @@ final class GameVM: ObservableObject {
         tracker.$debugConeDeg.assign(to: &$debugConeDeg)
         tracker.$debugShapeErr.assign(to: &$debugShapeErr)
         tracker.$debugYawDeg.assign(to: &$debugYawDeg)
+        notifications.$current.assign(to: &$fakeNotification)
+
+        // Kill any lingering bait when the run ends (win / retry / gave up) so a
+        // banner never floats over a result overlay.
+        engine.$state
+            .sink { [weak self] state in
+                switch state {
+                case .win, .levelCompleted, .retry, .gaveUp:
+                    self?.notifications.stop()
+                default: break
+                }
+            }
+            .store(in: &bag)
     }
 
     // MARK: Flow
@@ -138,6 +156,12 @@ final class GameVM: ObservableObject {
     private func startPlaying() {
         phase = .playing
         engine.startLevel(level)
+        // Bait only while the bar is actively advancing (head turned away):
+        // the chime/haptic/banner then pulls the player's gaze back to the
+        // phone, pausing the bar and usually costing an early-look-back.
+        notifications.start(language: PersistenceStore.shared.settings.language) { [weak self] in
+            self?.engineState == .lookingAway
+        }
     }
 
     /// Called by the Face Scan screen once its glitch effect finishes.
@@ -162,11 +186,15 @@ final class GameVM: ObservableObject {
         gaze.lockCurrentFace()   // re-baseline; player may have moved since first lock
         engine.startLevel(level)
         phase = .playing
+        notifications.start(language: PersistenceStore.shared.settings.language) { [weak self] in
+            self?.engineState == .lookingAway
+        }
     }
 
     func teardown() {
         calibrationTimer?.invalidate()
         engine.stop()
         gaze.pause()
+        notifications.stop()
     }
 }

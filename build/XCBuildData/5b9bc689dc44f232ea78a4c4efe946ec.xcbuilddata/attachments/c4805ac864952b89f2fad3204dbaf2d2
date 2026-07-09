@@ -1,0 +1,69 @@
+{
+  "" : {
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/Wofoking Watch Watch App-primary.dia",
+    "emit-module-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/Wofoking Watch Watch App-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/Wofoking Watch Watch App-primary-emit-module.dia",
+    "pch" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/Wofoking Watch Watch App-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/Wofoking Watch Watch App-primary.swiftdeps"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking Watch Watch App/HRMessage.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/HRMessage~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking Watch Watch App/WatchAppDelegate.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchAppDelegate~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking Watch Watch App/WatchContentView.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchContentView~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking Watch Watch App/WatchHeartRateManager.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WatchHeartRateManager~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/Wofoking Watch Watch App/WofokingWatchApp.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/WofokingWatchApp~partial.swiftmodule"
+  },
+  "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/umar/Project/CH-4/Wofoking/build/Wofoking.build/Debug-iphonesimulator/Wofoking Watch Watch App.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  }
+}
