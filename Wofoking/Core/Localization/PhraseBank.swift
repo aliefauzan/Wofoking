@@ -22,6 +22,8 @@ enum MockContext {
     case peek               // caught peeking (head away, eyes back)
     case heartRateSpike     // BPM crossed into elevated mid-level
     case frustrated         // caught scowling at the screen
+    case startupNudge       // first scripted prompt after the fake-loading grace (7s)
+    case startupDemand      // firmer follow-up if the player keeps staring
 }
 
 struct PhraseBank {
@@ -105,6 +107,14 @@ struct PhraseBank {
             "That scowl won't load the bar.",
             "Anger detected. Anger ignored.",
             "Unclench. It's just a game. Mostly.",
+        ],
+        // Scripted intro prompts. Single line each (deterministic order + one Tes
+        // clip apiece), so DON'T add variants — the engine plays them in sequence.
+        .startupNudge: [
+            "maybe stop staring at me like im a food",
+        ],
+        .startupDemand: [
+            "i just mentioned i dont like being watch. look away!!",
         ],
     ]
 }

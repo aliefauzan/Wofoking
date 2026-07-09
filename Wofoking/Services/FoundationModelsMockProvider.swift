@@ -77,6 +77,10 @@ struct FoundationModelsMockProvider: AsyncMockTextProvider {
             return "The player's heart rate just spiked. Tease them for getting stressed over a loading bar."
         case .frustrated:
             return "The player is scowling at the screen in frustration. Tease them about being mad."
+        case .startupNudge, .startupDemand:
+            // Scripted intro lines — never AI-refined (emitted with refine:false),
+            // but the switch must stay exhaustive.
+            return "Tell the staring player to look away from the loading bar."
         }
     }
 }

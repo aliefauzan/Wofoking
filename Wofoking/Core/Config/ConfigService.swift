@@ -75,6 +75,20 @@ final class ConfigService {
     var calibrationStableSeconds: TimeInterval = 2.5
     /// Continuous look-at-screen time before the Give Up button reveals.
     var giveUpRevealSeconds: TimeInterval = 5.0
+
+    // MARK: Startup intro (fake-loading grace before the first look-away prompt)
+
+    /// At level start the bar acts like a genuine loading screen for this long —
+    /// no look-away prompt, no reactive taunts — so the player believes it's
+    /// really loading. Then the first mocking nudge fires (`.startupNudge`).
+    var startupGraceSeconds: TimeInterval = 7.0
+    /// If the player is STILL staring this long after the nudge (never looked
+    /// away yet), the firmer follow-up prompt fires (`.startupDemand`).
+    var startupDemandDelaySeconds: TimeInterval = 5.0
+    /// Where the clean fake-loading bar climbs to over the grace window. Kept
+    /// mid-way (not 100) so it reads as loading-in-progress and leaves real
+    /// look-away distance to the finish once the mechanic reveals itself.
+    var startupFakeLoadTarget: Double = 60.0
     /// Upper bound on a single engine tick's dt. Without it a main-thread
     /// hitch (on-device AI taunt inference, thermal stall) lands seconds of
     /// fill or penalty in the one tick that fires after the stall.
@@ -273,8 +287,9 @@ final class ConfigService {
 
     // MARK: Storyline (static horror-satire intro before gameplay)
 
-    /// Per-character delay while a sentence types out (typewriter effect).
-    var storyTypeCharSeconds: TimeInterval = 0.085
+    /// Per-character delay while a caption types out (typewriter effect).
+    /// Tuned so the longest line still finishes typing within its ~3.6 s window.
+    var storyTypeCharSeconds: TimeInterval = 0.045
     /// Hold after a sentence finishes typing, before the page turns to the next.
     var storyLineInterval: TimeInterval = 1.6
     /// Cross-fade duration when swapping one sentence page for the next.
