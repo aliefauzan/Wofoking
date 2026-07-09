@@ -49,6 +49,7 @@ final class MockingService: ObservableObject {
               progress: Double = 0,
               failCount: Int = 0,
               speak: Bool = false,
+              refine: Bool = true,
               language: AppLanguage = .english) -> String {
         emitToken &+= 1
         let token = emitToken
@@ -57,7 +58,7 @@ final class MockingService: ObservableObject {
         currentLine = staticLine
         if speak { VoiceService.shared.speak(staticLine, language: language) }
 
-        if let ai {
+        if refine, let ai {
             Task { [weak self] in
                 let refined = await ai.line(context, progress: progress,
                                             failCount: failCount, language: language)
@@ -66,5 +67,12 @@ final class MockingService: ObservableObject {
             }
         }
         return staticLine
+    }
+
+    /// Blank the caption (e.g. the clean startup grace). Bumps the token so a
+    /// pending AI refine can't repaint a stale line afterwards.
+    func clear() {
+        emitToken &+= 1
+        currentLine = ""
     }
 }

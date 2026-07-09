@@ -55,6 +55,12 @@ final class GameEngine: ObservableObject {
     private var wasElevated = false
     private var wasFrustrated = false
 
+    // Startup intro (FR: fake-loading grace, then two scripted look-away prompts).
+    private var levelStartAt = Date()
+    private var hasEverLookedAway = false
+    private var startupNudgeDone = false
+    private var startupDemandDone = false
+
     private var language: AppLanguage { persistence.settings.language }
 
     init(gaze: GazeTracker, mocking: MockingService? = nil) {
@@ -82,6 +88,10 @@ final class GameEngine: ObservableObject {
         fakeOutFreezeUntil = nil
         wasElevated = false
         wasFrustrated = false
+        levelStartAt = Date()
+        hasEverLookedAway = false
+        startupNudgeDone = false
+        startupDemandDone = false
         previousGaze = gaze.gaze
         state = .lookingAtScreen
         VoiceService.shared.enabled = persistence.settings.voiceMockingEnabled
@@ -138,6 +148,19 @@ final class GameEngine: ObservableObject {
         let g = gaze.gaze
         defer { previousGaze = g }
 
+        // Startup intro (clean fake loading): for the first `startupGraceSeconds`
+        // the bar is a genuinely plain loading bar — gaze-independent auto-fill,
+        // no taunts, no caption — so the player believes it's really loading.
+        // The gaze mechanic and every taunt below are skipped until it elapses.
+        let sinceStart = now.timeIntervalSince(levelStartAt)
+        if sinceStart < config.startupGraceSeconds {
+            if !mocking.currentLine.isEmpty { mocking.clear() }
+            loader.fakeLoad(dt, to: config.startupFakeLoadTarget,
+                            over: config.startupGraceSeconds)
+            syncProgress()
+            return
+        }
+
         // Reveal Give Up after a continuous stretch of looking at the screen.
         if g == .lookingAtScreen {
             if lookingAtScreenSince == nil { lookingAtScreenSince = now }
@@ -177,6 +200,25 @@ final class GameEngine: ObservableObject {
                 windowStart = Date().addingTimeInterval(-windowConsumed)
             } else {
                 state = .lookingAtScreen
+            }
+        }
+
+        // Grace elapsed: mockingly nudge, then demand, the player to look away —
+        // until they finally do (first look-away ends the intro). Both scripted
+        // lines are spoken verbatim (refine: false) so the AI never rewrites them.
+        if isAdvancing(g) { hasEverLookedAway = true }
+        if !hasEverLookedAway {
+            if !startupNudgeDone, sinceStart >= config.startupGraceSeconds {
+                startupNudgeDone = true
+                mocking.emit(.startupNudge, progress: loader.progress,
+                             speak: persistence.settings.voiceMockingEnabled,
+                             refine: false, language: language)
+            } else if startupNudgeDone, !startupDemandDone,
+                      sinceStart >= config.startupGraceSeconds + config.startupDemandDelaySeconds {
+                startupDemandDone = true
+                mocking.emit(.startupDemand, progress: loader.progress,
+                             speak: persistence.settings.voiceMockingEnabled,
+                             refine: false, language: language)
             }
         }
 
