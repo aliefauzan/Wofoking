@@ -94,3 +94,7 @@ private struct Hills: Shape {
         return p
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    LoadAwayBackground()
+}

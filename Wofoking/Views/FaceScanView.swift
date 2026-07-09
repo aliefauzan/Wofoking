@@ -258,3 +258,12 @@ private struct BoxReticle: Shape {
         return p
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    ZStack {
+        LoadAwayBackground()
+        FaceScanView(vm: GameVM(level: .two),
+                     loc: Localization(language: .english),
+                     onFinished: {})
+    }
+}

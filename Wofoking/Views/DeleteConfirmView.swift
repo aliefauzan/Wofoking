@@ -58,3 +58,11 @@ struct DeleteConfirmView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 5) { onYes() }
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    ZStack {
+        LoadAwayBackground()
+        DeleteConfirmView(onNo: {}, onYes: {})
+    }
+    .environmentObject(PersistenceStore.shared)
+}

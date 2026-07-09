@@ -298,3 +298,11 @@ struct GameContainerView: View {
         .background(.ultraThinMaterial, in: RoundedRectangle(cornerRadius: 20))
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    @Previewable @State var path: [Route] = [.game(.two)]
+    // No TrueDepth camera in the canvas → the manual "Hold to Look Away"
+    // fallback + black scenery render; BPM shows "—".
+    GameContainerView(level: .two, path: $path)
+        .environmentObject(PersistenceStore.shared)
+}

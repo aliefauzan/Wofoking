@@ -56,3 +56,15 @@ struct FakeNotificationBanner: View {
         .colorScheme(.light)   // real banners are light-chrome regardless of app
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    ZStack(alignment: .top) {
+        Color.black.ignoresSafeArea()
+        FakeNotificationBanner(notification: FakeNotification(
+            appName: "Messages", iconSystemName: "message.fill", tint: .green,
+            title: "Mom", message: "Are you home? Call me when you can.",
+            time: "now"))
+            .padding(.top, 8)
+            .padding(.horizontal, 40)
+    }
+}

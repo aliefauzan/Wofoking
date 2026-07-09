@@ -126,3 +126,13 @@ struct CameraPreviewView: UIViewRepresentable {
     func updateUIView(_ uiView: UIView, context: Context) {}
     #endif
 }
+
+#Preview(traits: .landscapeLeft) {
+    // No TrueDepth AR session in the canvas → renders black; here to preview
+    // the view wiring, not a live face feed.
+    ZStack {
+        Color.black.ignoresSafeArea()
+        CameraPreviewView(tracker: GazeTracker(), showFaceMesh: true)
+            .ignoresSafeArea()
+    }
+}

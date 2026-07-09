@@ -108,3 +108,9 @@ struct LevelSelectView: View {
         path.append(.game(.two))
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    @Previewable @State var path: [Route] = []
+    LevelSelectView(path: $path)
+        .environmentObject(PersistenceStore.shared)
+}

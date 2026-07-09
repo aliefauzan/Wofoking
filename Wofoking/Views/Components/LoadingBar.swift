@@ -38,3 +38,21 @@ struct LoadingBar: View {
         .white
     }
 }
+
+#Preview("Loading", traits: .landscapeLeft) {
+    ZStack {
+        Color.black.ignoresSafeArea()
+        LoadingBar(progress: 63, atWindow: false)
+            .frame(maxWidth: 520)
+            .padding(40)
+    }
+}
+
+#Preview("At window", traits: .landscapeLeft) {
+    ZStack {
+        Color.black.ignoresSafeArea()
+        LoadingBar(progress: 100, atWindow: true)
+            .frame(maxWidth: 520)
+            .padding(40)
+    }
+}

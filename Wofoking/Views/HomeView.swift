@@ -247,3 +247,9 @@ struct RedDoorView: View {
         }
     }
 }
+
+#Preview(traits: .landscapeLeft) {
+    @Previewable @State var path: [Route] = []
+    HomeView(path: $path)
+        .environmentObject(PersistenceStore.shared)
+}
